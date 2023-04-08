@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wqb.mapper.StudentMapper">
+
+    <select id="queryByUsername" resultType="com.wqb.entity.Student">
+        select * from Student where s_name = #{sname}
+    </select>
+
+    <select id="selectStudentGrade" resultMap="StudentGradeVoMap">
+        select s.*, g.grade_name
+        from Student s
+        left join grade g
+        on s.gradeId = g.grade_id
+        ${ew.customSqlSegment}
+    </select>
+    
+    <resultMap id="StudentGradeVoMap" type="com.wqb.vo.StudentGradeVo">
+        <id property="sId" column="s_id"></id>
+        <result property="sNo" column="s_no"></result>
+        <result property="sName" column="s_name"></result>
+        <result property="gender" column="gender"></result>
+        <result property="major" column="major"></result>
+        <result property="phone" column="phone"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="gradeName" column="grade_name"></result>
+        <result property="roleid" column="roleId"></result>
+    </resultMap>
+
+    <select id="selectLogin" resultMap="StudentGradeVoMap">
+        select s.s_id, s.s_no, s.s_name, s.gender, s.major, s.phone, s.create_time, s.roleId, g.grade_name
+        from Student s
+        left join grade g
+        on s.gradeId = g.grade_id
+        ${ew.customSqlSegment}
+    </select>
+
+</mapper>

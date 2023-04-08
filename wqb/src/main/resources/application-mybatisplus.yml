@@ -1,0 +1,11 @@
+mybatis-plus:
+  # mapper.xml扫描路径
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  # 实体类扫描路径
+  type-aliases-package: com.wqb.entity
+  # 数据库下划线转驼峰
+  configuration:
+    map-underscore-to-camel-case: true
+    # 枚举映射
+    default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
+
