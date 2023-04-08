@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wqb.common.Result;
 import com.wqb.common.QueryPageParam;
+import com.wqb.entity.Menu;
 import com.wqb.entity.Student;
+import com.wqb.service.MenuService;
 import com.wqb.service.StudentService;
 import com.wqb.vo.StudentGradeVo;
 import org.apache.el.lang.ELArithmetic;
@@ -35,6 +37,9 @@ import java.util.List;
 public class StudentController {
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private MenuService menuService;
 
     @GetMapping("/list")
     public List<Student> list() {
@@ -166,7 +171,16 @@ public class StudentController {
         lambdaQueryWrapper.eq(Student::getSNo, student.getSNo())
                 .eq(Student::getSPassword, student.getSPassword());
         List<StudentGradeVo> result = studentService.selectLogin(lambdaQueryWrapper);
-        return result.size()>0?Result.suc(result.get(0)):Result.fail();
+        // 登录时就获取用户的权限，限定以后的访问界面
+        if (result.size() > 0) {
+            StudentGradeVo studentGradeVo = result.get(0);
+            List menuList = menuService.lambdaQuery().like(Menu::getMenuright, studentGradeVo.getRoleid()).list();
+            HashMap res = new HashMap();
+            res.put("student", studentGradeVo);
+            res.put("menu", menuList);
+            return Result.suc(res);
+        }
+        return Result.fail();
     }
 
     @PostMapping("/selectByGrade")

@@ -6,6 +6,7 @@ import './assets/global.css';
 import axios from 'axios';// 跨域
 import VueRouter from 'vue-router';
 import router from "@/router";
+import store from "./store"
 
 Vue.prototype.$httpUrl = 'http://localhost:8092';
 Vue.prototype.$axios = axios;
@@ -15,5 +16,6 @@ Vue.use(VueRouter);
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')

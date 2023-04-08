@@ -14,14 +14,9 @@
       <span slot="title">首页</span>
     </el-menu-item>
 
-    <el-menu-item index="/Admin">
-      <i class="el-icon-s-opportunity"></i>
-      <span slot="title">学生管理</span>
-    </el-menu-item>
-
-    <el-menu-item index="/User">
-      <i class="el-icon-s-custom"></i>
-      <span slot="title">导航二</span>
+    <el-menu-item :index="'/'+item.menuclick" v-for="(item,i) in menu" :key="i">
+      <i :class="item.menuicon"></i>
+      <span slot="title">{{item.menuname}}</span>
     </el-menu-item>
   </el-menu>
 </template>
@@ -29,13 +24,32 @@
 <script>
 export default {
   name: "Aside",
-  data() {
+  data(){
     return {
-      // isCollapse: false
+      //isCollapse:false
+
+      /* menu:[
+           {
+               menuClick:'Admin',
+               menuName:'管路员管理',
+               menuIcon:'el-icon-s-custom'
+           },{
+               menuClick:'User',
+               menuName:'用户管理',
+               menuIcon:'el-icon-user-solid'
+           }
+       ]*/
     }
   },
-  props: {
-    isCollapse: Boolean
+  computed:{
+    "menu":{
+      get(){
+        return this.$store.state.menu
+      }
+    }
+  },
+  props:{
+    isCollapse:Boolean
   }
 }
 </script>

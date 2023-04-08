@@ -1,6 +1,6 @@
 package com.wqb.mapper;
 
-import com.wqb.entity.Grade;
+import com.wqb.entity.Menu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,9 +10,9 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author lincheon
- * @since 2023-04-03
+ * @since 2023-04-08
  */
 @Mapper
-public interface GradeMapper extends BaseMapper<Grade> {
+public interface MenuMapper extends BaseMapper<Menu> {
 
 }

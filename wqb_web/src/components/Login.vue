@@ -57,14 +57,6 @@
               console.log(this.categoryOptions)
               this.$router.push({path: '/register', query: {index:this.categoryOptions}});
             })
-
-
-            // router.push({
-            //   path:'/register',
-            //   query:categoryOptions
-            //   // 多个参数这样的写法
-            //   // query:{Shuju}
-            // })
           },
 
           getOneCategory() {
@@ -84,10 +76,11 @@
                             console.log(res)
                             if(res.code==200){
                                 //存储
-                                sessionStorage.setItem("CurUser",JSON.stringify(res.data))
+                                sessionStorage.setItem("CurUser",JSON.stringify(res.data.student))
 
                                 // console.log(res.data.menu)
-                                // this.$store.commit("setMenu",res.data.menu)
+                                // console.log(res.data.student)
+                                this.$store.commit("setMenu",res.data.menu)
                                 //跳转到主页
                                 this.$router.replace('/Index');
                             }else{
