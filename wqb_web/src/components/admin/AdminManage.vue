@@ -77,7 +77,7 @@
                 </el-form-item>
                 <el-form-item label="密码" prop="spassword">
                     <el-col :span="20">
-                        <el-input v-model="form.spassword"></el-input>
+                        <el-input type="password" v-model="form.spassword" show-password autocomplete="off"></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="性别">
@@ -143,6 +143,7 @@
               total: 0,
               sno: '',
               sname: '',
+              spassword:'',
               gender: '',
               genders: [
                 {
@@ -196,6 +197,8 @@
         methods:{
             resetForm() {
                 this.$refs.form.resetFields();
+                this.form.sid = ''
+                this.form.gradeid = ''
             },
             del(sid){
                 console.log(sid)
@@ -227,11 +230,11 @@
                     this.form.sid = row.sid
                     this.form.sno = row.sno
                     this.form.sname = row.sname
-                    this.form.spassword = ''
+                    this.form.spassword = row.spassword
                     this.form.gender = row.gender +''
                     this.form.major = row.major
                     this.form.phone = row.phone
-                    this.form.gradeid = row.gradeid
+                    this.form.gradeName = row.gradeName
                 })
             },
             add(){

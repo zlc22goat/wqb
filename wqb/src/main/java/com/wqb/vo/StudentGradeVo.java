@@ -34,6 +34,7 @@ public class StudentGradeVo {
     private Integer gender;
     private String major;
     private String phone;
+    private String sPassword;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+8") //从数据库读出日期格式时，进行转换的规则
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")//接受从前端传入的日期格式，映射到java类日期属性的规则
     private Date createTime;

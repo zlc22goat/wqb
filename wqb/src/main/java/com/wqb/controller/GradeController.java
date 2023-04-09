@@ -66,6 +66,11 @@ public class GradeController {
         return gradeService.saveOrUpdate(grade);
     }
 
+    @GetMapping("/del")
+    public Result del(@RequestParam String id) {
+        return gradeService.removeById(id) ? Result.suc() : Result.fail();
+    }
+
     @GetMapping("/delete")
     public boolean delete(Integer id) {
         return gradeService.removeById(id);
@@ -99,27 +104,27 @@ public class GradeController {
         return Result.suc(result.getRecords(), result.getTotal());
     }
 
-//    /**
-//     * 根据名模糊查询
-//     * @param query
-//     * @return
-//     */
-//    @PostMapping("/selectByName")
-//    public Result selectByName(@RequestBody QueryPageParam query) {
-//        HashMap param = query.getParam();
-//        String name = (String)param.get("cname");
-//        Page<Grade> gradePage = new Page<>();
-//        gradePage.setCurrent(query.getPageNum());
-//        gradePage.setSize(query.getPageSize());
-//
-//        LambdaQueryWrapper<Grade> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-//        lambdaQueryWrapper.like(Grade::getGradeName, name);
-//
-//        IPage result = gradeService.page(gradePage, lambdaQueryWrapper);
-//
-//        System.out.println("total = " + result.getTotal());
-//
-//        return Result.suc(result.getRecords(), result.getTotal());
-//    }
+    /**
+     * 根据名模糊查询
+     * @param query
+     * @return
+     */
+    @PostMapping("/selectByName")
+    public Result selectByName(@RequestBody QueryPageParam query) {
+        HashMap param = query.getParam();
+        String name = (String)param.get("gradeName");
+        Page<Grade> gradePage = new Page<>();
+        gradePage.setCurrent(query.getPageNum());
+        gradePage.setSize(query.getPageSize());
+
+        LambdaQueryWrapper<Grade> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.like(Grade::getGradeName, name);
+
+        IPage result = gradeService.page(gradePage, lambdaQueryWrapper);
+
+        System.out.println("total = " + result.getTotal());
+
+        return Result.suc(result.getRecords(), result.getTotal());
+    }
 }
 

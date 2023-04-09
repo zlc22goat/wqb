@@ -75,6 +75,11 @@ public class CourseController {
         return courseService.removeById(id);
     }
 
+    @GetMapping("/del")
+    public Result del(@RequestParam String id) {
+        return courseService.removeById(id) ? Result.suc() : Result.fail();
+    }
+
 //    @PostMapping("/listP")
 //    public Result listP(@RequestBody Course course) {
 //        LambdaQueryWrapper<Course> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -116,10 +121,15 @@ public class CourseController {
         coursePage.setCurrent(query.getPageNum());
         coursePage.setSize(query.getPageSize());
 
-        LambdaQueryWrapper<Course> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.like(Course::getCName, name);
+        IPage result = null;
 
-        IPage result = courseService.page(coursePage, lambdaQueryWrapper);
+        if ("".equals(name)) {
+            result = courseService.page(coursePage);
+        } else {
+            LambdaQueryWrapper<Course> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.like(Course::getCName, name);
+            result = courseService.page(coursePage, lambdaQueryWrapper);
+        }
 
         System.out.println("total = " + result.getTotal());
 

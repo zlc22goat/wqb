@@ -53,18 +53,21 @@
         </el-descriptions>
 
         <DateUtils></DateUtils>
+      <Marquee style="font-size: 40px;"></Marquee>
     </div>
 </template>
 
 <script>
     import DateUtils from "./DateUtils";
+    import Marquee from "@/components/Marquee.vue";
     export default {
         name: "Home",
-        components: {DateUtils},
+        components: {Marquee, DateUtils},
         data() {
 
             return {
-                student:{}
+                student: {},
+                message: []
             }
         },
         computed:{

@@ -81,6 +81,11 @@ public class MessageController {
         return messageService.removeById(id);
     }
 
+    @GetMapping("/del")
+    public Result del(@RequestParam String id) {
+        return messageService.removeById(id) ? Result.suc() : Result.fail();
+    }
+
 //    @PostMapping("/listP")
 //    public Result listP(@RequestBody Message message) {
 //        LambdaQueryWrapper<Message> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -126,10 +131,14 @@ public class MessageController {
         messagePage.setSize(query.getPageSize());
 
         LambdaQueryWrapper<Message> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.like(Message::getContext, context).orderByDesc(Message::getCreateTime);
+
+        if ("".equals(context)) {
+            lambdaQueryWrapper.orderByDesc(Message::getCreateTime);
+        } else {
+            lambdaQueryWrapper.like(Message::getContext, context).orderByDesc(Message::getCreateTime);
+        }
 
         IPage result = messageService.page(messagePage, lambdaQueryWrapper);
-
         System.out.println("total = " + result.getTotal());
 
         return Result.suc(result.getRecords(), result.getTotal());

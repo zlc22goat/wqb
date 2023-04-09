@@ -23,6 +23,7 @@
         <result property="phone" column="phone"></result>
         <result property="createTime" column="create_time"></result>
         <result property="gradeName" column="grade_name"></result>
+        <result property="sPassword" column="s_password"></result>
         <result property="roleid" column="roleId"></result>
     </resultMap>
 

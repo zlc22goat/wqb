@@ -31,10 +31,10 @@
           <el-input v-model="ruleForm.phone" clearable></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="spassword">
-          <el-input type="password" v-model="ruleForm.spassword" clearable></el-input>
+          <el-input type="password" v-model="ruleForm.spassword" show-password autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="checkPass">
-          <el-input type="password" v-model="ruleForm.checkPass" clearable></el-input>
+          <el-input type="password" v-model="ruleForm.checkPass" show-password autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm">注册</el-button>
