@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wqb.mapper.QuestionMapper">
+    <select id="selectQuestion" resultMap="QuestionCourseVoMap">
+        select q.*, c.c_name
+        from Question q
+        left join Course c
+        on q.course_id = c.c_id
+        ${ew.customSqlSegment}
+    </select>
+
+    <select id="selectAll" resultMap="QuestionCourseVoMap">
+        select q.*, c.c_name
+        from Question q
+        left join Course c
+        on q.course_id = c.c_id
+    </select>
+
+    <resultMap id="QuestionCourseVoMap" type="com.wqb.vo.QuestionCourseVo">
+        <id property="id" column="id"></id>
+        <result property="body" column="body"></result>
+        <result property="optiona" column="optionA"></result>
+        <result property="optionb" column="optionB"></result>
+        <result property="optionc" column="optionC"></result>
+        <result property="optiond" column="optionD"></result>
+
+        <result property="answerOption" column="answer_option"></result>
+        <result property="answerPic" column="answer_pic"></result>
+        <result property="myAnswerOption" column="my_answer_option"></result>
+        <result property="myAnswerPic" column="my_answer_pic"></result>
+
+        <result property="detail" column="detail"></result>
+        <result property="level" column="level"></result>
+        <result property="cName" column="c_name"></result>
+        <result property="type" column="type"></result>
+        <result property="studentId" column="student_id"></result>
+        <result property="remark" column="remark"></result>
+        <result property="mastery" column="mastery"></result>
+
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+    </resultMap>
+</mapper>
