@@ -5,10 +5,14 @@ import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * <p>
@@ -38,11 +42,11 @@ public class Menu implements Serializable {
 
     @ApiModelProperty(value = "菜单级别")
     @TableField("menuLevel")
-    private String menulevel;
+    private Integer menulevel;
 
     @ApiModelProperty(value = "菜单的父code")
     @TableField("menuParentCode")
-    private String menuparentcode;
+    private Integer menuparentcode;
 
     @ApiModelProperty(value = "点击触发的函数")
     @TableField("menuClick")
@@ -58,5 +62,7 @@ public class Menu implements Serializable {
     @TableField("menuIcon")
     private String menuicon;
 
+    @TableField(exist = false)
+    private List<Menu> childMenu;
 
 }

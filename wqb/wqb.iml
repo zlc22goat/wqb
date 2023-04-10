@@ -130,5 +130,8 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.9.1" level="project" />
     <orderEntry type="library" name="Maven: io.swagger:swagger-annotations:1.6.2" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.commonmark:commonmark:0.21.0" level="project" />
+    <orderEntry type="library" name="Maven: org.commonmark:commonmark-ext-gfm-tables:0.21.0" level="project" />
+    <orderEntry type="library" name="Maven: org.commonmark:commonmark-ext-heading-anchor:0.21.0" level="project" />
   </component>
 </module>

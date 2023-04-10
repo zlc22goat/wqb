@@ -14,10 +14,26 @@
       <span slot="title">首页</span>
     </el-menu-item>
 
-    <el-menu-item :index="'/'+item.menuclick" v-for="(item,i) in menu" :key="i">
-      <i :class="item.menuicon"></i>
-      <span slot="title">{{item.menuname}}</span>
-    </el-menu-item>
+    <el-submenu :index="'/'+item.menuclick" v-for="(item,i) in menuData" :key="i">
+      <template slot="title">
+        <i :class="item.menuicon"></i>
+        <span slot="title">{{item.menuname}}</span>
+      </template>
+
+      <el-menu-item :index="'/'+subItem.menuclick"
+                    v-for="subItem in item.childMenu"
+                    :key="subItem.menuclick">
+        <template slot="title">
+          <span slot="title">{{subItem.menuname}}</span>
+        </template>
+
+      </el-menu-item>
+    </el-submenu>
+
+<!--    <el-menu-item :index="'/'+item.menuclick" v-for="(item,i) in menu" :key="i">-->
+<!--      <i :class="item.menuicon"></i>-->
+<!--      <span slot="title">{{item.menuname}}</span>-->
+<!--    </el-menu-item>-->
   </el-menu>
 </template>
 
@@ -26,31 +42,33 @@ export default {
   name: "Aside",
   data(){
     return {
-      //isCollapse:false
+      menuData: [],
+      student: JSON.parse(sessionStorage.getItem('CurUser'))
+    }
+  },
+  created() {
+    this.getMenuList()
+  },
+  methods: {
+    getMenuList() {
+      this.$axios.get(this.$httpUrl + "/menu/getAllMenu?roleId=" + this.student.roleid).then(res=>res.data).then(res=>{
+        if (res.code != 200) return this.$message.error("获取失败")
+        this.menuData = res.data
+        console.log(this.menuData)
+      })
+    }
+  },
 
-      /* menu:[
-           {
-               menuClick:'Admin',
-               menuName:'管路员管理',
-               menuIcon:'el-icon-s-custom'
-           },{
-               menuClick:'User',
-               menuName:'用户管理',
-               menuIcon:'el-icon-user-solid'
-           }
-       ]*/
-    }
-  },
-  computed:{
-    "menu":{
-      get(){
-        return this.$store.state.menu
-      }
-    }
-  },
-  props:{
-    isCollapse:Boolean
-  }
+  // computed:{
+  //   "menuData":{
+  //     get(){
+  //       return this.$store.state.menu
+  //     }
+  //   }
+  // },
+  // props:{
+  //   isCollapse:Boolean
+  // }
 }
 </script>
 

@@ -1,6 +1,7 @@
 package com.wqb.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wqb.entity.Student;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
@@ -25,4 +26,6 @@ public interface StudentService extends IService<Student> {
     IPage selectStudentGrade(IPage<Student> page, Wrapper wrapper);
 
     List<StudentGradeVo> selectLogin(Wrapper wrapper);
+
+    IPage selectAll(IPage<Student> studentPage);
 }

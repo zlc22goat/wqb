@@ -13,6 +13,13 @@
         on s.gradeId = g.grade_id
         ${ew.customSqlSegment}
     </select>
+
+    <select id="selectAll" resultMap="StudentGradeVoMap">
+        select s.*, g.grade_name
+        from Student s
+        left join grade g
+        on s.gradeId = g.grade_id
+    </select>
     
     <resultMap id="StudentGradeVoMap" type="com.wqb.vo.StudentGradeVo">
         <id property="sId" column="s_id"></id>

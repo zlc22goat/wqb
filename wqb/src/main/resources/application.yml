@@ -1,4 +1,3 @@
-
 server:
   port: 8092
 
@@ -9,10 +8,12 @@ spring:
     username: root
     password: chingi200102
 
-
+# 控制台输出SQL
 Logging:
   level:
-    com.wms: debug
+    com.wqb: debug
+
+file-save-path: ./wqb/src/main/resources/images/
 
 
 

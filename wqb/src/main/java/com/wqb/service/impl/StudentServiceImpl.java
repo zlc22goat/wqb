@@ -26,10 +26,10 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     @Resource
     private StudentMapper studentMapper;
 
-//    @Override
-//    public List<Student> selectAll() {
-//        return studentMapper.selectAll();
-//    }
+    @Override
+    public IPage selectAll(IPage<Student> page) {
+        return studentMapper.selectAll(page);
+    }
 
     @Override
     public IPage selectStudentGrade(IPage<Student> page, Wrapper wrapper) {

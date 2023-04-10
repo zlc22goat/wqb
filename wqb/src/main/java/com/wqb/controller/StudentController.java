@@ -12,13 +12,11 @@ import com.wqb.entity.Student;
 import com.wqb.service.MenuService;
 import com.wqb.service.StudentService;
 import com.wqb.vo.StudentGradeVo;
-import org.apache.el.lang.ELArithmetic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -52,11 +50,13 @@ public class StudentController {
         Page<Student> studentPage = new Page<>();
         studentPage.setCurrent(query.getPageNum());
         studentPage.setSize(query.getPageSize());
+
         LambdaQueryWrapper<Student> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Student::getRoleid, 1);
 //        studentPage.setRecords(studentService.selectAll());
 
-        IPage result = studentService.selectStudentGrade(studentPage, lambdaQueryWrapper);
+//        IPage result = studentService.selectStudentGrade(studentPage, lambdaQueryWrapper);
+        IPage result = studentService.selectAll(studentPage);
 //        result.setRecords(studentService.selectAll());
         return Result.suc(result.getRecords());
     }

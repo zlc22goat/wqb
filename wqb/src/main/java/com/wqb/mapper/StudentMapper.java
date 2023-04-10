@@ -27,4 +27,5 @@ public interface StudentMapper extends BaseMapper<Student> {
 
     List<StudentGradeVo> selectLogin(@Param(Constants.WRAPPER) Wrapper ew);
 
+    IPage selectAll(IPage<Student> page);
 }
