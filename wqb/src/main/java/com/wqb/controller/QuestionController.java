@@ -63,7 +63,13 @@ public class QuestionController {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < 4; i++) {
                 if (list[i]) {
-                    stringBuilder.append(i);
+                    switch (i) {
+                        case 0: stringBuilder.append("A"); break;
+                        case 1: stringBuilder.append("B"); break;
+                        case 2: stringBuilder.append("C"); break;
+                        case 3: stringBuilder.append("D"); break;
+                    }
+
                 }
             }
             question.setAnswerOption(stringBuilder.toString());
@@ -119,27 +125,30 @@ public class QuestionController {
     @PostMapping("/selectByParam")
     public Result selectByParam(@RequestBody QueryPageParam query) {
         HashMap param = query.getParam();
-        Integer level = (Integer) param.get("level");
-        Integer courseId = (Integer) param.get("courseId");
-        Integer type = (Integer) param.get("type");
-        Integer studentId = (Integer) param.get("studentId");
-        Integer mastery = (Integer) param.get("mastery");
+        String body = (String) param.get("body");
+        String level = (String) param.get("level");
+        String courseId = (String) param.get("courseId");
+        String type = (String) param.get("type");
+        String studentId = (String) param.get("studentId");
+        String mastery = (String) param.get("mastery");
 
         Page<Question> questionPage = new Page<>();
         questionPage.setCurrent(query.getPageNum());
         questionPage.setSize(query.getPageSize());
 
         LambdaQueryWrapper<Question> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        if (level != null) {
+        if (!"".equals(level)) {
             lambdaQueryWrapper.eq(Question::getLevel, level);
-        } else if (courseId != null) {
+        } else if (!"".equals(courseId)) {
             lambdaQueryWrapper.eq(Question::getCourseId, courseId);
-        } else if (type != null) {
+        } else if (!"".equals(type)) {
             lambdaQueryWrapper.eq(Question::getType, type);
-        } else if (studentId != null) {
+        } else if (!"".equals(studentId)) {
             lambdaQueryWrapper.eq(Question::getStudentId, studentId);
-        } else if (mastery != null) {
+        } else if (!"".equals(mastery)) {
             lambdaQueryWrapper.eq(Question::getMastery, mastery);
+        } else if (!"".equals(body)) {
+            lambdaQueryWrapper.like(Question::getBody, body);
         }
         IPage result = questionService.selectQuestion(questionPage, lambdaQueryWrapper);
 

@@ -182,12 +182,6 @@
                         {required: true, message: '请输入密码', trigger: 'blur'},
                         {min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur'}
                     ],
-                    // age: [
-                    //     {required: true, message: '请输入年龄', trigger: 'blur'},
-                    //     {min: 1, max: 3, message: '长度在 1 到 3 个位', trigger: 'blur'},
-                    //     {pattern: /^([1-9][0-9]*){1,3}$/,message: '年龄必须为正整数字',trigger: "blur"},
-                    //     {validator:checkAge,trigger: 'blur'}
-                    // ],
                     phone: [
                         {required: true,message: "手机号不能为空",trigger: "blur"},
                         {pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur"}

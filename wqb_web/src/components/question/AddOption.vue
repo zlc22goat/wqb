@@ -317,7 +317,6 @@ export default {
       centerDialogVisible3: false,
       centerDialogVisible4: false,
       centerDialogVisible5: false,
-      centerDialogVisible6: false,
       categoryOptions: [],
       student: '',
       checkboxGroup: [],
@@ -373,7 +372,6 @@ export default {
         case 3: this.centerDialogVisible3 = !this.centerDialogVisible3; break;
         case 4: this.centerDialogVisible4 = !this.centerDialogVisible4; break;
         case 5: this.centerDialogVisible5 = !this.centerDialogVisible5; break;
-        case 6: this.centerDialogVisible6 = !this.centerDialogVisible6; break;
       }
     },
     save(){
@@ -472,10 +470,6 @@ export default {
     uploadOptionDPic(response) {
       console.log(response)
       this.form.optiondPic = response.data
-    },
-    uploadAnswerPic(response) {
-      console.log(response)
-      this.form.answerPic = response.data
     },
     uploadDetailPic(response) {
       console.log(response)
