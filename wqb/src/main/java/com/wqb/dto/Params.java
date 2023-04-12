@@ -1,10 +1,7 @@
 package com.wqb.dto;
 
 import com.wqb.entity.Question;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 /**
  * @author LinCheon

@@ -59,13 +59,15 @@ public class QuestionController {
         Question question = param.getQuestion();
 
         // 选择题
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 4; i++) {
-            if (list[i]) {
-                stringBuilder.append(i);
+        if (list != null) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < 4; i++) {
+                if (list[i]) {
+                    stringBuilder.append(i);
+                }
             }
+            question.setAnswerOption(stringBuilder.toString());
         }
-        question.setAnswerOption(stringBuilder.toString());
 
         Timestamp createTime = new Timestamp(new Date().getTime());
         question.setCreateTime(createTime);

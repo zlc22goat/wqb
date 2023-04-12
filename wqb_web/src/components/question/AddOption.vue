@@ -450,34 +450,34 @@ export default {
     handleError() {
       this.$message.error("图片上传失败，请确认图片是否过大！")
     },
-    beforeRemove(file, fileList) {
+    beforeRemove(file) {
       return this.$confirm(`确定移除 ${ file.name }？`);
     },
-    uploadBodyPic(response, file, fileList) {
+    uploadBodyPic(response) {
       console.log(response)
       this.form.bodyPic = response.data
     },
-    uploadOptionAPic(response, file, fileList) {
+    uploadOptionAPic(response) {
       console.log(response)
       this.form.optionaPic = response.data
     },
-    uploadOptionBPic(response, file, fileList) {
+    uploadOptionBPic(response) {
       console.log(response)
       this.form.optionbPic = response.data
     },
-    uploadOptionCPic(response, file, fileList) {
+    uploadOptionCPic(response) {
       console.log(response)
       this.form.optioncPic = response.data
     },
-    uploadOptionDPic(response, file, fileList) {
+    uploadOptionDPic(response) {
       console.log(response)
       this.form.optiondPic = response.data
     },
-    uploadAnswerPic(response, file, fileList) {
+    uploadAnswerPic(response) {
       console.log(response)
       this.form.answerPic = response.data
     },
-    uploadDetailPic(response, file, fileList) {
+    uploadDetailPic(response) {
       console.log(response)
       this.form.detailPic = response.data
     },
