@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,27 +30,43 @@ public class QuestionCourseVo {
 
     private String body;
 
+    private String bodyPic;
+
     @TableField("optionA")
     private String optiona;
+
+    private String optionaPic;
 
     @TableField("optionB")
     private String optionb;
 
+    private String optionbPic;
+
     @TableField("optionC")
     private String optionc;
+
+    private String optioncPic;
 
     @TableField("optionD")
     private String optiond;
 
-    private Integer answerOption;
+    private String optiondPic;
+
+    private String answerOption;
+
+    private String answer;
 
     private String answerPic;
 
-    private Integer myAnswerOption;
+    private String myAnswerOption;
+
+    private String myAnswer;
 
     private String myAnswerPic;
 
     private String detail;
+
+    private String detailPic;
 
     private Integer level;
 

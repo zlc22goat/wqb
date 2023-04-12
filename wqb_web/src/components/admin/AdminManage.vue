@@ -48,7 +48,8 @@
           </template>
         </el-table-column>
       </el-table>
-        <el-pagination
+<!--        控制分页-->
+      <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="pageNum"
@@ -110,9 +111,9 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-    <el-button @click="centerDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="save">确 定</el-button>
-  </span>
+              <el-button @click="centerDialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="save">确 定</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>

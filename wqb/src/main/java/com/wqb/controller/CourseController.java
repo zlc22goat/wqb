@@ -34,8 +34,8 @@ public class CourseController {
     private CourseService courseService;
 
     @GetMapping("/list")
-    public List<Course> list() {
-        return courseService.list();
+    public Result list() {
+        return Result.suc(courseService.list());
     }
 
     @PostMapping("/save")

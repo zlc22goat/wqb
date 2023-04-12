@@ -3,17 +3,18 @@ package com.wqb.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wqb.common.QueryPageParam;
 import com.wqb.common.Result;
-import com.wqb.entity.Menu;
+import com.wqb.dto.Params;
 import com.wqb.entity.Question;
 import com.wqb.service.MenuService;
 import com.wqb.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,21 +42,32 @@ public class QuestionController {
         return questionService.list();
     }
 
-    @PostMapping("/selectAll")
-    public Result selectAll(@RequestBody QueryPageParam query) {
-
-        Page<Question> questionPage = new Page<>();
-        questionPage.setCurrent(query.getPageNum());
-        questionPage.setSize(query.getPageSize());
-
-        IPage res = questionService.selectAll(questionPage);
-        return Result.suc(res.getRecords());
-    }
+//    @PostMapping("/selectAll")
+//    public Result selectAll(@RequestBody QueryPageParam query) {
+//
+//        Page<Question> questionPage = new Page<>();
+//        questionPage.setCurrent(query.getPageNum());
+//        questionPage.setSize(query.getPageSize());
+//
+//        IPage res = questionService.selectAll(questionPage);
+//        return Result.suc(res.getRecords());
+//    }
 
     @PostMapping("/save")
-    public Result save(@RequestBody Question question) {
-        Timestamp createTime = new Timestamp(new Date().getTime());
+    public Result save(@RequestBody Params param) {
+        Boolean[] list = param.getList();
+        Question question = param.getQuestion();
 
+        // 选择题
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            if (list[i]) {
+                stringBuilder.append(i);
+            }
+        }
+        question.setAnswerOption(stringBuilder.toString());
+
+        Timestamp createTime = new Timestamp(new Date().getTime());
         question.setCreateTime(createTime);
         question.setUpdateTime(createTime);
         question.setMastery(0);

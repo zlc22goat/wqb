@@ -4,6 +4,7 @@ import com.wqb.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +35,7 @@ public class FileController {
     @Value("${file-save-path}")
     private String fileSavePath;
 
-    @GetMapping(path = "/upload")
+    @PostMapping (path = "/upload")
     public Result uploadFile(MultipartFile file, HttpServletRequest request) {
         String destPath = new File(fileSavePath).getAbsolutePath();
         //1.后半段目录：  2020/03/15

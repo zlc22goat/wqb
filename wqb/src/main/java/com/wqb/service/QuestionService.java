@@ -2,8 +2,8 @@ package com.wqb.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.wqb.entity.Question;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wqb.entity.Question;
 
 /**
  * <p>
@@ -16,5 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface QuestionService extends IService<Question> {
     IPage selectQuestion(IPage<Question> page, Wrapper wrapper);
 
-    IPage selectAll(IPage<Question> page);
+//    IPage selectAll(IPage<Question> page);
 }

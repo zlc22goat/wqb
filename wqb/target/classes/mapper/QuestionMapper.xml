@@ -9,27 +9,28 @@
         ${ew.customSqlSegment}
     </select>
 
-    <select id="selectAll" resultMap="QuestionCourseVoMap">
-        select q.*, c.c_name
-        from Question q
-        left join Course c
-        on q.course_id = c.c_id
-    </select>
-
     <resultMap id="QuestionCourseVoMap" type="com.wqb.vo.QuestionCourseVo">
         <id property="id" column="id"></id>
         <result property="body" column="body"></result>
+        <result property="bodyPic" column="body_pic"></result>
         <result property="optiona" column="optionA"></result>
+        <result property="optionaPic" column="optiona_pic"></result>
         <result property="optionb" column="optionB"></result>
+        <result property="optionbPic" column="optionb_pic"></result>
         <result property="optionc" column="optionC"></result>
+        <result property="optioncPic" column="optionc_pic"></result>
         <result property="optiond" column="optionD"></result>
+        <result property="optiondPic" column="optiond_pic"></result>
 
         <result property="answerOption" column="answer_option"></result>
+        <result property="answer" column="answer"></result>
         <result property="answerPic" column="answer_pic"></result>
         <result property="myAnswerOption" column="my_answer_option"></result>
+        <result property="myAnswer" column="my_answer"></result>
         <result property="myAnswerPic" column="my_answer_pic"></result>
 
         <result property="detail" column="detail"></result>
+        <result property="detailPic" column="detail_pic"></result>
         <result property="level" column="level"></result>
         <result property="cName" column="c_name"></result>
         <result property="type" column="type"></result>

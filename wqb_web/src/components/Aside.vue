@@ -66,9 +66,9 @@ export default {
   //     }
   //   }
   // },
-  // props:{
-  //   isCollapse:Boolean
-  // }
+  props:{
+    isCollapse:Boolean
+  }
 }
 </script>
 
