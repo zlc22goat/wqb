@@ -116,8 +116,8 @@
           </el-col>
         </el-form-item>
 
-        <el-button type="danger" @click="resetParam">重 置</el-button>
-        <el-button type="primary" @click="save">确 定</el-button>
+        <el-button type="danger" @click="resetForm">重 置</el-button>
+        <el-button type="primary" @click="doSave">确 定</el-button>
       </el-form>
     </div>
     <div style="width: 50%;  float: right">
@@ -176,6 +176,7 @@ export default {
       centerDialogVisible1: false,
       centerDialogVisible2: false,
       categoryOptions: [],
+      hasData: this.$route.query.index,
       student: '',
       form: {
         id: '',
@@ -201,6 +202,18 @@ export default {
   methods:{
     init(){
       this.student = JSON.parse(sessionStorage.getItem('CurUser'))
+      if (typeof this.hasData != "undefined") {
+        this.form.id = this.hasData.id
+        this.form.body = this.hasData.body
+        this.form.bodyPic = this.hasData.bodyPic
+        this.form.answer = this.hasData.answer
+        this.form.answerPic = this.hasData.answerPic
+        this.form.detail = this.hasData.detail
+        this.form.detailPic = this.hasData.detailPic
+        this.form.level = this.hasData.level
+        this.form.courseId = this.hasData.cname
+        this.form.remark = this.hasData.remark
+      }
     },
     getOneCategory() {
       this.$axios.get(this.$httpUrl+'/course/list').then(res=>res.data).then(res=>{
@@ -214,6 +227,40 @@ export default {
         case 2: this.centerDialogVisible2 = !this.centerDialogVisible2; break;
       }
     },
+    doSave(){
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          if(this.form.id){
+            this.mod();
+          }else{
+            console.log("save")
+            this.save();
+          }
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    mod() {
+      this.$axios.post(this.$httpUrl+'/question/update',this.form).then(res=>res.data).then(res=>{
+        console.log(res)
+        if(res.code==200){
+
+          this.$message({
+            message: '操作成功！',
+            type: 'success'
+          });
+          this.resetForm()
+          this.$router.push("/QuestionList")
+        }else{
+          this.$message({
+            message: '操作失败！',
+            type: 'error'
+          });
+        }
+      })
+    },
     save(){
       this.form.studentId = this.student.sid
       let dataOb = {
@@ -226,10 +273,8 @@ export default {
             message: '操作成功！',
             type: 'success'
           });
-          this.centerDialogVisible = false
-          // this.loadPost()
-          // this.resetForm()
-          this.resetParam()
+          this.resetForm()
+          this.$router.push("/QuestionList")
         }else{
           this.$message({
             message: '操作失败！',
@@ -239,7 +284,7 @@ export default {
       })
     },
 
-    resetParam(){
+    resetForm(){
       this.form.body=''
       this.form.bodyPic=''
       this.form.answer = ''

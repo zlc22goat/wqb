@@ -148,12 +148,12 @@
         </el-form-item>
 
         <el-form-item label="答案" prop="answerOption">
-          <el-checkbox-group v-model="checkboxGroup">
-            <el-checkbox name="option" v-model="checkedA" label="0" @change="handleCheckedChange(0)">A</el-checkbox>
-            <el-checkbox name="option" v-model="checkedB" label="1" @change="handleCheckedChange(1)">B</el-checkbox>
-            <el-checkbox name="option" v-model="checkedC" label="2" @change="handleCheckedChange(2)">C</el-checkbox>
-            <el-checkbox name="option" v-model="checkedD" label="3" @change="handleCheckedChange(3)">D</el-checkbox>
-          </el-checkbox-group>
+<!--          <el-checkbox-group v-model="checkboxGroup">-->
+            <el-checkbox id="checkA" v-model="checkedA" label="0" @change="handleCheckedChange(0)">A</el-checkbox>
+            <el-checkbox id="checkB" v-model="checkedB" label="1" @change="handleCheckedChange(1)">B</el-checkbox>
+            <el-checkbox id="checkC" v-model="checkedC" label="2" @change="handleCheckedChange(2)">C</el-checkbox>
+            <el-checkbox id="checkD" v-model="checkedD" label="3" @change="handleCheckedChange(3)">D</el-checkbox>
+<!--          </el-checkbox-group>-->
         </el-form-item>
 
         <el-form-item label="解析" prop="detail">
@@ -213,8 +213,8 @@
           </el-col>
         </el-form-item>
 
-        <el-button type="danger" @click="resetParam">重 置</el-button>
-        <el-button type="primary" @click="save">确 定</el-button>
+        <el-button type="danger" @click="resetForm">重 置</el-button>
+        <el-button type="primary" @click="doSave">确 定</el-button>
       </el-form>
     </div>
     <div style="width: 50%;  float: right">
@@ -318,8 +318,8 @@ export default {
       centerDialogVisible4: false,
       centerDialogVisible5: false,
       categoryOptions: [],
+      hasData: this.$route.query.index,
       student: '',
-      checkboxGroup: [],
       checkedA: false,
       checkedB: false,
       checkedC: false,
@@ -337,7 +337,7 @@ export default {
         optioncPic: '',
         optiond: '',
         optiondPic: '',
-        // answerOption: '',
+        answerOption: '',
         // answer: '',
         // answerPic: '',
         // myAnswerOption: '',
@@ -348,7 +348,7 @@ export default {
         level: 0,
         courseId: '',
         // cName: '',
-        type: '0',// 单选题
+        type: '0',
         studentId: '',
         remark: '',
         // mastery: ''
@@ -358,6 +358,37 @@ export default {
   methods:{
     init(){
       this.student = JSON.parse(sessionStorage.getItem('CurUser'))
+      if (typeof this.hasData != "undefined") {
+        this.form.id = this.hasData.id
+        this.form.body = this.hasData.body
+        this.form.bodyPic = this.hasData.bodyPic
+        this.form.optiona = this.hasData.optiona
+        this.form.optionaPic = this.hasData.optionaPic
+        this.form.optionb = this.hasData.optionb
+        this.form.optionbPic = this.hasData.optionbPic
+        this.form.optionc = this.hasData.optionc
+        this.form.optioncPic = this.hasData.optioncPic
+        this.form.optiond = this.hasData.optiond
+        this.form.optiondPic = this.hasData.optiondPic
+
+        // 选择题答案，传给后端解析出复选框勾选状态
+        this.form.answerOption = this.hasData.answerOption
+        this.form.detail = this.hasData.detail
+        this.form.detailPic = this.hasData.detailPic
+        this.form.level = this.hasData.level
+        this.form.courseId = this.hasData.cname
+        this.form.remark = this.hasData.remark
+        this.getList()
+      }
+      },
+    getList() {
+      this.$axios.post(this.$httpUrl+'/question/getList', this.hasData.answerOption).then(res=>res.data).then(res=>{
+        this.checkedA = res[0]
+        this.checkedB = res[1]
+        this.checkedC = res[2]
+        this.checkedD = res[3]
+      })
+
     },
     getOneCategory() {
       this.$axios.get(this.$httpUrl+'/course/list').then(res=>res.data).then(res=>{
@@ -373,6 +404,40 @@ export default {
         case 4: this.centerDialogVisible4 = !this.centerDialogVisible4; break;
         case 5: this.centerDialogVisible5 = !this.centerDialogVisible5; break;
       }
+    },
+    doSave(){
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          if(this.form.id){
+            this.mod();
+          }else{
+            console.log("save")
+            this.save();
+          }
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    mod() {
+      this.$axios.post(this.$httpUrl+'/question/update',this.form).then(res=>res.data).then(res=>{
+        console.log(res)
+        if(res.code==200){
+
+          this.$message({
+            message: '操作成功！',
+            type: 'success'
+          });
+          this.resetForm()
+          this.$router.push("/QuestionList")
+        }else{
+          this.$message({
+            message: '操作失败！',
+            type: 'error'
+          });
+        }
+      })
     },
     save(){
       this.form.studentId = this.student.sid
@@ -392,10 +457,8 @@ export default {
             message: '操作成功！',
             type: 'success'
           });
-          this.centerDialogVisible = false
-          // this.loadPost()
-          // this.resetForm()
-          this.resetParam()
+          this.resetForm()
+          this.$router.push("/QuestionList")
         }else{
           this.$message({
             message: '操作失败！',
@@ -405,7 +468,7 @@ export default {
       })
     },
 
-    resetParam(){
+    resetForm(){
       this.form.body=''
       this.form.bodyPic=''
       this.form.optiona = ''
@@ -426,7 +489,6 @@ export default {
       this.checkedB = false
       this.checkedC = false
       this.checkedD = false
-      this.checkboxGroup = []
     },
     rateChange(value) {
       console.log(value);

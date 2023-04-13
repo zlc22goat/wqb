@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -100,11 +101,20 @@ public class QuestionController {
         return questionService.updateById(question);
     }
 
-//    @GetMapping("/findByNo")
-//    public Result findByNo(@RequestParam String no){
-//        List list = questionService.lambdaQuery().eq(Question::getSNo,no).list();
-//        return list.size()>0?Result.suc(list):Result.fail();
-//    }
+    @PostMapping("/getList")
+    public Boolean[] getList(@RequestBody String str){
+        Boolean[] list = {false, false, false, false};
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            switch (c) {
+                case 'A': list[0] = true; break;
+                case 'B': list[1] = true; break;
+                case 'C': list[2] = true; break;
+                case 'D': list[3] = true; break;
+            }
+        }
+        return list;
+    }
 
     //新增或修改
     @PostMapping("/saveOrMod")
@@ -127,9 +137,9 @@ public class QuestionController {
         HashMap param = query.getParam();
         String body = (String) param.get("body");
         String level = (String) param.get("level");
-        String courseId = (String) param.get("courseId");
+//        Integer courseId = (Integer) param.get("courseId");
         String type = (String) param.get("type");
-        String studentId = (String) param.get("studentId");
+        Integer studentId = (Integer) param.get("studentId");
         String mastery = (String) param.get("mastery");
 
         Page<Question> questionPage = new Page<>();
@@ -139,17 +149,24 @@ public class QuestionController {
         LambdaQueryWrapper<Question> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (!"".equals(level)) {
             lambdaQueryWrapper.eq(Question::getLevel, level);
-        } else if (!"".equals(courseId)) {
+        }
+        if (param.get("courseId") != "") {
+            Integer courseId = (Integer) param.get("courseId");
             lambdaQueryWrapper.eq(Question::getCourseId, courseId);
-        } else if (!"".equals(type)) {
+        }
+        if (!"".equals(type)) {
             lambdaQueryWrapper.eq(Question::getType, type);
-        } else if (!"".equals(studentId)) {
+        }
+        if (studentId != null) {
             lambdaQueryWrapper.eq(Question::getStudentId, studentId);
-        } else if (!"".equals(mastery)) {
+        }
+        if (!"".equals(mastery)) {
             lambdaQueryWrapper.eq(Question::getMastery, mastery);
-        } else if (!"".equals(body)) {
+        }
+        if (!"".equals(body)) {
             lambdaQueryWrapper.like(Question::getBody, body);
         }
+        lambdaQueryWrapper.orderByDesc(Question::getUpdateTime).orderByDesc(Question::getCreateTime);
         IPage result = questionService.selectQuestion(questionPage, lambdaQueryWrapper);
 
         return Result.suc(result.getRecords(), result.getTotal());
