@@ -30,6 +30,16 @@ const routes = [
                 },
                 component:()=>import('../components/Home')
             },
+            {
+                path:'/ReviewOption',
+                name:'ReviewOption',
+                component:()=>import('../components/question/ReviewOption')
+            },
+            {
+                path:'/ReviewOther',
+                name:'ReviewOther',
+                component:()=>import('../components/question/ReviewOther')
+            },
             // {
             //     path:'/Admin',
             //     name:'admin',

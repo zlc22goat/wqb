@@ -116,7 +116,8 @@ public class QuestionController {
     }
 
     @PostMapping("/getCheck")
-    public Result getCheck(@RequestBody String str) {
+    public Result getCheck(@RequestBody Question question) {
+        String str = question.getAnswerOption();
         String[] strings = new String[str.length()];
         for (int i = 0; i < str.length(); i++) {
             strings[i] = String.valueOf(str.charAt(i));

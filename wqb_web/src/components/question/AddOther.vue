@@ -243,7 +243,10 @@ export default {
       });
     },
     mod() {
-      this.$axios.post(this.$httpUrl+'/question/update',this.form).then(res=>res.data).then(res=>{
+      let dataOb = {
+        question: this.form,
+      }
+      this.$axios.post(this.$httpUrl+'/question/update',dataOb).then(res=>res.data).then(res=>{
         console.log(res)
         if(res.code==200){
 

@@ -194,7 +194,7 @@
           </el-col>
         </el-form-item>
 
-        <el-form-item label="所属课程" prop="cName">
+        <el-form-item label="所属课程" prop="cname">
           <el-select v-model="form.courseId" filterable placeholder="请选择所属课程" style="margin-left: 5px;">
             <el-option
                 v-for="item in categoryOptions"
@@ -331,6 +331,7 @@ export default {
         optiond: '',
         optiondPic: '',
         answerOption: '',
+        cname: '',
         // answer: '',
         // answerPic: '',
         // myAnswerOption: '',
@@ -368,10 +369,11 @@ export default {
         this.form.detail = this.hasData.detail
         this.form.detailPic = this.hasData.detailPic
         this.form.level = this.hasData.level
-        this.form.courseId = this.hasData.cname
+        this.form.courseId = this.hasData.courseId
+        this.form.cname = this.hasData.cname
         this.form.remark = this.hasData.remark
 
-        this.$axios.post(this.$httpUrl+'/question/getCheck', this.form.answerOption).then(res=>res.data).then(res=>{
+        this.$axios.post(this.$httpUrl+'/question/getCheck', this.form).then(res=>res.data).then(res=>{
           this.checkList = res.data;
         })
       }

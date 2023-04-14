@@ -41,7 +41,10 @@ public class MenuUtils {
         // 对每一个一级菜单添加二级菜单
         for (Menu menu: roots) {
             // 设置子菜单
-            menu.setChildMenu(getCurrentChildrenMenu(menu));
+            if (menu.getState() == 1) {
+                menu.setChildMenu(getCurrentChildrenMenu(menu));
+            }
+
         }
         return roots;
     }
