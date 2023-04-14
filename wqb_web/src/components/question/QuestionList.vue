@@ -1,5 +1,6 @@
 <template>
   <div>
+<!--    查询-->
     <div style="margin-bottom: 5px;">
       <el-input v-model="body" placeholder="请输入题干" suffix-icon="el-icon-search" style="width: 200px;"
                 @keyup.enter.native="loadPost"></el-input>
@@ -42,12 +43,17 @@
       <el-button type="primary" style="margin-left: 5px;" @click="loadPost">查询</el-button>
       <el-button type="info" style="margin-left: 5px;" @click="resetParam">重置</el-button>
     </div>
+
+<!--    显示-->
     <el-table
         :data="tableData"
-        style="width: 100%" :header-cell-style = "{ background: '#f3f6fd', color: '#555'}" border>
+        style="width: 100%"
+        :header-cell-style = "{ background: '#f3f6fd', color: '#555'}" border>
+<!--      展开后的内容-->
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
+          <el-form label-position="left"
+                   inline class="demo-table-expand">
 
             <el-form-item label="题干:">
               <td>{{props.row.body}}</td>
@@ -102,10 +108,11 @@
                 <div slot="error" class="image-slot"></div>
               </el-image>
             </el-form-item>
-
           </el-form>
         </template>
       </el-table-column>
+
+<!--      表格显示-->
       <el-table-column label="学科" prop="cName" width="100">
         <template slot-scope="scope">
           {{scope.row.cname}}
@@ -139,20 +146,23 @@
 
       <el-table-column label="创建时间" prop="createTime" width="200"></el-table-column>
       <el-table-column label="最后更新时间" prop="updateTime" width="200"></el-table-column>
-      <el-table-column prop="operate" label="操作" width="180">
+
+      <el-table-column prop="operate" label="操作" width="200">
         <template slot-scope="scope">
           <el-button size="small" type="success" @click="doMod(scope.row)">编辑</el-button>
           <el-popconfirm
               title="确定删除吗？"
               @confirm="del(scope.row.id)"
-              style="margin-left: 5px;"
-          >
+              style="margin-left: 5px;">
             <el-button slot="reference" size="small" type="danger">删除</el-button>
           </el-popconfirm>
+          <el-button @click="viewDetail(scope.row)"
+                     size="small" type="warning" style="margin-left: 5px;">练习</el-button>
         </template>
       </el-table-column>
     </el-table>
 
+<!--    分页-->
     <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -228,6 +238,13 @@ export default {
     }
   },
   methods: {
+    viewDetail(row) {
+      if (row.type === 0) {
+        this.$router.push({path: "/ReviewOption", query: {pushData: row}})
+      } else {
+        this.$router.push({path: "/ReviewOther", query: {pushData: row}})
+      }
+    },
     del(id){
       console.log(id)
       this.$axios.get(this.$httpUrl+'/question/del?id='+id).then(res=>res.data).then(res=>{

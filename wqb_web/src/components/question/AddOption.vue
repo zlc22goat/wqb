@@ -148,12 +148,12 @@
         </el-form-item>
 
         <el-form-item label="答案" prop="answerOption">
-<!--          <el-checkbox-group v-model="checkboxGroup">-->
-            <el-checkbox id="checkA" v-model="checkedA" label="0" @change="handleCheckedChange(0)">A</el-checkbox>
-            <el-checkbox id="checkB" v-model="checkedB" label="1" @change="handleCheckedChange(1)">B</el-checkbox>
-            <el-checkbox id="checkC" v-model="checkedC" label="2" @change="handleCheckedChange(2)">C</el-checkbox>
-            <el-checkbox id="checkD" v-model="checkedD" label="3" @change="handleCheckedChange(3)">D</el-checkbox>
-<!--          </el-checkbox-group>-->
+          <el-checkbox-group v-model="checkList">
+            <el-checkbox label="A">A</el-checkbox>
+            <el-checkbox label="B">B</el-checkbox>
+            <el-checkbox label="C">C</el-checkbox>
+            <el-checkbox label="D">D</el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
 
         <el-form-item label="解析" prop="detail">
@@ -189,14 +189,12 @@
           <el-col :span="20">
             <div class="block">
               <span class="demonstration">请选择难度</span>
-              <el-rate v-model="form.level" @change="rateChange"></el-rate>
+              <el-rate v-model="form.level"></el-rate>
             </div>
           </el-col>
         </el-form-item>
 
         <el-form-item label="所属课程" prop="cName">
-          <!--                  这里的form.gradeid是将要提交上去的，赋值给student中的gradeid字段-->
-          <!--                  而下面的item.gradeId是从grade中查出的，id名为gradeId，区分一下-->
           <el-select v-model="form.courseId" filterable placeholder="请选择所属课程" style="margin-left: 5px;">
             <el-option
                 v-for="item in categoryOptions"
@@ -275,18 +273,12 @@
         </el-form-item>
 
         <el-form-item label="答案" prop="answerOption">
-          <td v-if="checkedA === true">
-            A
-          </td>
-          <td v-if="checkedB === true">
-            B
-          </td>
-          <td v-if="checkedC === true">
-            C
-          </td>
-          <td v-if="checkedD === true">
-            D
-          </td>
+          <el-checkbox-group v-model="checkList">
+            <el-checkbox label="A" disabled></el-checkbox>
+            <el-checkbox label="B" disabled></el-checkbox>
+            <el-checkbox label="C" disabled></el-checkbox>
+            <el-checkbox label="D" disabled></el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
 
         <el-form-item label="解析" prop="detail">
@@ -320,10 +312,11 @@ export default {
       categoryOptions: [],
       hasData: this.$route.query.index,
       student: '',
-      checkedA: false,
-      checkedB: false,
-      checkedC: false,
-      checkedD: false,
+      // checkedA: false,
+      // checkedB: false,
+      // checkedC: false,
+      // checkedD: false,
+      checkList :[],
       form: {
         id: '',
         body: '',
@@ -371,23 +364,17 @@ export default {
         this.form.optiond = this.hasData.optiond
         this.form.optiondPic = this.hasData.optiondPic
 
-        // 选择题答案，传给后端解析出复选框勾选状态
         this.form.answerOption = this.hasData.answerOption
         this.form.detail = this.hasData.detail
         this.form.detailPic = this.hasData.detailPic
         this.form.level = this.hasData.level
         this.form.courseId = this.hasData.cname
         this.form.remark = this.hasData.remark
-        this.getList()
+
+        this.$axios.post(this.$httpUrl+'/question/getCheck', this.form.answerOption).then(res=>res.data).then(res=>{
+          this.checkList = res.data;
+        })
       }
-      },
-    getList() {
-      this.$axios.post(this.$httpUrl+'/question/getList', this.hasData.answerOption).then(res=>res.data).then(res=>{
-        this.checkedA = res[0]
-        this.checkedB = res[1]
-        this.checkedC = res[2]
-        this.checkedD = res[3]
-      })
 
     },
     getOneCategory() {
@@ -421,7 +408,11 @@ export default {
       });
     },
     mod() {
-      this.$axios.post(this.$httpUrl+'/question/update',this.form).then(res=>res.data).then(res=>{
+      let dataOb = {
+        question: this.form,
+        list: this.checkList
+      }
+      this.$axios.post(this.$httpUrl+'/question/update',dataOb).then(res=>res.data).then(res=>{
         console.log(res)
         if(res.code==200){
 
@@ -443,12 +434,7 @@ export default {
       this.form.studentId = this.student.sid
       let dataOb = {
         question: this.form,
-        list: [
-            this.checkedA,
-            this.checkedB,
-            this.checkedC,
-            this.checkedD
-        ]
+        list: this.checkList
       }
       this.$axios.post(this.$httpUrl+'/question/save', dataOb).then(res=>res.data).then(res=>{
         console.log("save")
@@ -485,21 +471,7 @@ export default {
       this.form.level = 0
       this.form.courseId = ''
       this.form.remark = ''
-      this.checkedA = false
-      this.checkedB = false
-      this.checkedC = false
-      this.checkedD = false
-    },
-    rateChange(value) {
-      console.log(value);
-    },
-    handleCheckedChange(i) {
-      switch (i) {
-        case 0: this.checkedA = !this.checkedA; break;
-        case 1: this.checkedB = !this.checkedB; break;
-        case 2: this.checkedC = !this.checkedC; break;
-        case 3: this.checkedD = !this.checkedD; break;
-      }
+      this.checkList = []
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);

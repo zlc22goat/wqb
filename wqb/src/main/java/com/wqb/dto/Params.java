@@ -11,5 +11,5 @@ import lombok.Data;
 @Data
 public class Params {
     private Question question;
-    private Boolean[] list;
+    private String[] list;
 }

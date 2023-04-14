@@ -56,21 +56,15 @@ public class QuestionController {
 
     @PostMapping("/save")
     public Result save(@RequestBody Params param) {
-        Boolean[] list = param.getList();
         Question question = param.getQuestion();
 
-        // 选择题
-        if (list != null) {
+        if (param.getList() != null) {
+            String[] list = param.getList();
+            Arrays.sort(list);
             StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < 4; i++) {
-                if (list[i]) {
-                    switch (i) {
-                        case 0: stringBuilder.append("A"); break;
-                        case 1: stringBuilder.append("B"); break;
-                        case 2: stringBuilder.append("C"); break;
-                        case 3: stringBuilder.append("D"); break;
-                    }
-
+            for (int i = 0; i < list.length; i++) {
+                if (list[i] != null) {
+                    stringBuilder.append(list[i]);
                 }
             }
             question.setAnswerOption(stringBuilder.toString());
@@ -85,7 +79,21 @@ public class QuestionController {
     }
 
     @PostMapping("/update")
-    public Result update(@RequestBody Question question) {
+    public Result update(@RequestBody Params param) {
+        Question question = param.getQuestion();
+
+        if (param.getList() != null) {
+            String[] list = param.getList();
+            Arrays.sort(list);
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < list.length; i++) {
+                if (list[i] != null) {
+                    stringBuilder.append(list[i]);
+                }
+            }
+            question.setAnswerOption(stringBuilder.toString());
+        }
+
         Timestamp createTime = new Timestamp(new Date().getTime());
         question.setUpdateTime(createTime);
         return questionService.updateById(question) ? Result.suc() : Result.fail();
@@ -101,20 +109,21 @@ public class QuestionController {
         return questionService.updateById(question);
     }
 
-    @PostMapping("/getList")
-    public Boolean[] getList(@RequestBody String str){
-        Boolean[] list = {false, false, false, false};
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            switch (c) {
-                case 'A': list[0] = true; break;
-                case 'B': list[1] = true; break;
-                case 'C': list[2] = true; break;
-                case 'D': list[3] = true; break;
-            }
-        }
-        return list;
+    @PostMapping("/findById")
+    public Result findById(@RequestParam Integer id) {
+        Question question = questionService.getById(id);
+        return Result.suc(question);
     }
+
+    @PostMapping("/getCheck")
+    public Result getCheck(@RequestBody String str) {
+        String[] strings = new String[str.length()];
+        for (int i = 0; i < str.length(); i++) {
+            strings[i] = String.valueOf(str.charAt(i));
+        }
+        return Result.suc(strings);
+    }
+
 
     //新增或修改
     @PostMapping("/saveOrMod")
