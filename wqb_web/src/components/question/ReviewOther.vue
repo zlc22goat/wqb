@@ -1,10 +1,218 @@
 <template>
-<button>ok</button>
+  <div>
+    <div style="width: 50%;  float: left">
+      <!--      <label>题目预览</label>-->
+      <el-form ref="form" :model="hasData" label-width="80px">
+
+        <el-form-item label="题干" prop="body">
+          <el-col :span="20">
+            <td>{{hasData.body}}</td>
+            <el-image :src="hasData.bodyPic" v-if="hasData.bodyPic !== ''">
+              <div slot="error" class="image-slot"></div>
+            </el-image>
+          </el-col>
+        </el-form-item><br>
+
+        <el-form-item label="" prop="level">
+          <el-col :span="20">
+            <div class="block">
+              <el-rate v-model="hasData.level" disabled></el-rate>
+            </div>
+          </el-col>
+        </el-form-item><br>
+
+        <el-form-item label="你的答案" prop="myAnswer">
+          <el-col :span="20">
+            <el-input v-model="answerForm.myAnswer">
+              <el-button style="padding-right:10px" slot="suffix" type="text" @click="uploadPic">上传图片</el-button>
+            </el-input>
+            <el-dialog title="上传描述你的答案的图片"
+                       :visible.sync="centerDialogVisible"
+                       width="30%"
+                       center>
+              <el-upload
+                  class="upload-demo"
+                  drag
+                  action="http://localhost:8092/upload"
+                  :on-success="uploadMyAnswerPic"
+                  :on-preview="handlePreview"
+                  :on-remove="handleRemove"
+                  :before-remove="beforeRemove"
+                  :on-error="handleError">
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+              </el-upload>
+              <span slot="footer" class="dialog-footer">
+              <el-button type="primary" @click="uploadPic">确 定</el-button>
+            </span>
+            </el-dialog>
+          </el-col>
+
+        </el-form-item>
+
+        <el-button type="danger" @click="resetForm">重 答</el-button>
+        <el-button type="primary" @click="save">确 定</el-button>
+
+      </el-form>
+    </div>
+
+    <div style="width: 50%; float:right;" v-if="this.isAnswer === true">
+
+      <el-form ref="form" :model="answerForm" label-width="80px">
+        <el-form-item label="你的答案" prop="MyAnswer">
+          <el-col :span="20">
+            <td>{{answerForm.myAnswer}}</td>
+            <el-image :src="answerForm.myAnswerPic" v-if="answerForm.myAnswerPic !== ''">
+              <div slot="error" class="image-slot"></div>
+            </el-image>
+          </el-col>
+        </el-form-item>
+      </el-form>
+
+      <el-form ref="form" :model="hasData" label-width="80px">
+
+        <el-form-item label="正确答案">
+          <el-col :span="20">
+            <td>{{hasData.answer}}</td>
+            <el-image :src="hasData.answerPic" v-if="hasData.answerPic !== ''">
+              <div slot="error" class="image-slot"></div>
+            </el-image>
+          </el-col>
+        </el-form-item>
+        <br>
+
+        <el-form-item label="解析:">
+          <td>{{ hasData.detail }}</td>
+          <el-image :src="hasData.detailPic" v-if="hasData.detailPic !== ''">
+            <div slot="error" class="image-slot"></div>
+          </el-image>
+        </el-form-item>
+
+        <el-button type="primary" @click="returnBack">答错了，下次复习</el-button>
+        <el-button type="danger" @click="returnBack">答对了，猜的</el-button>
+        <el-button type="success" @click="returnOk">这题会了</el-button>
+      </el-form>
+
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "ReviewOther"
+  name: "ReviewOther",
+  data() {
+    return {
+      isAnswer: false,
+      // isCorrect: false,
+      centerDialogVisible: false,
+      hasData: this.$route.query.pushData,
+      // checkList :[],
+      correctAnswer: '',
+      correctAnswerPic: '',
+      myAnswer: '',
+      form: {
+        id: '',
+        remark: '',
+        mastery: ''
+      },
+      answerForm: {
+        myAnswer: '',
+        myAnswerPic: '',
+        questionId: ''
+      }
+    }
+  },
+  methods:{
+    init(){
+      if (typeof this.hasData != "undefined") {
+        this.form.id = this.hasData.id
+        this.form.remark = this.hasData.remark
+        this.answerForm.questionId = this.hasData.id
+      }
+    },
+    mod() {
+      let dataOb = {
+        question: this.hasData,
+      }
+      this.$axios.post(this.$httpUrl+'/question/update',dataOb).then(res=>res.data).then(res=>{
+        // console.log(res)
+        if(res.code==200){
+          this.$message({
+            message: '操作成功！',
+            type: 'success'
+          });
+          this.$router.push("/QuestionList")
+        }else{
+          this.$message({
+            message: '操作失败！',
+            type: 'error'
+          });
+        }
+      })
+
+    },
+    save(){
+      // let dataOb = {
+      //   id: this.hasData.id,
+      //   answer: this.answerForm
+      // }
+      this.$axios.post(this.$httpUrl+'/answer/savePic', this.answerForm).then(res=>res.data).then(res=>{
+        // console.log("save")
+        if(res.code===200){
+          // this.$message({
+          //   message: '操作成功！',
+          //   type: 'success'
+          // });
+          this.$message({
+            message: '答题成功，自己比较一下答案吧。。。',
+            type: 'success'
+          });
+        }else{
+          this.$message({
+            message: '操作失败！',
+            type: 'error'
+          });
+        }
+      })
+      this.isAnswer = true
+    },
+    uploadPic() {
+      this.centerDialogVisible = !this.centerDialogVisible
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+    handleError() {
+      this.$message.error("图片上传失败，请确认图片是否过大！")
+    },
+    beforeRemove(file) {
+      return this.$confirm(`确定移除 ${ file.name }？`);
+    },
+    uploadMyAnswerPic(response) {
+      // console.log(response)
+      this.answerForm.myAnswerPic = response.data
+    },
+    resetForm(){
+      // console.log(this.answerForm.myAnswer)
+      this.answerForm.myAnswer = ''
+      this.isAnswer = false
+    },
+    returnBack() {
+      if (this.hasData.mastery !== 0)  this.hasData.mastery = this.hasData.mastery - 1
+      this.mod()
+    },
+    returnOk() {
+      if (this.hasData.mastery !== 2)  this.hasData.mastery = this.hasData.mastery + 1
+      this.mod()
+    },
+  },
+  created(){
+    this.init()
+  }
 }
 </script>
 
