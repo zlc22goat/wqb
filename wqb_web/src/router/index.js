@@ -40,6 +40,11 @@ const routes = [
                 name:'ReviewOther',
                 component:()=>import('../components/question/ReviewOther')
             },
+            {
+                path:'/ReviewExamDetail',
+                name:'ReviewExamDetail',
+                component:()=>import('../components/exam/ReviewExamDetail')
+            },
             // {
             //     path:'/Admin',
             //     name:'admin',

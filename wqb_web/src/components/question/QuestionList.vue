@@ -2,6 +2,7 @@
   <div>
 <!--    查询-->
     <div style="margin-bottom: 5px;">
+      <el-button type="success" style="margin-right: 5px;" @click="initName" size="small">组卷</el-button>
       <el-input v-model="body" placeholder="请输入题干" suffix-icon="el-icon-search" style="width: 200px;"
                 @keyup.enter.native="loadPost"></el-input>
       <el-select v-model="mastery" filterable placeholder="请选择掌握程度" style="margin-left: 5px;">
@@ -40,15 +41,23 @@
         </el-option>
       </el-select>
 
-      <el-button type="primary" style="margin-left: 5px;" @click="loadPost">查询</el-button>
-      <el-button type="info" style="margin-left: 5px;" @click="resetParam">重置</el-button>
+      <el-button type="primary" style="margin-left: 5px;" @click="loadPost" size="small">查询</el-button>
+      <el-button type="info" style="margin-left: 5px;" @click="resetParam" size="small">重置</el-button>
     </div>
 
 <!--    显示-->
     <el-table
+        ref="multipleTable"
+        @selection-change="handleSelectionChange"
         :data="tableData"
         style="width: 100%"
         :header-cell-style = "{ background: '#f3f6fd', color: '#555'}" border>
+
+<!--      控制多选-->
+      <el-table-column
+          type="selection"
+          width="40">
+      </el-table-column>
 <!--      展开后的内容-->
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -172,6 +181,26 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total">
     </el-pagination>
+
+    <el-dialog
+        title="输入你的试卷名吧！"
+        :visible.sync="centerDialogVisible"
+        width="30%"
+        center>
+
+      <el-form ref="form" :model="examForm" label-width="80px">
+        <el-form-item label="" prop="name">
+          <el-col :span="20">
+            <el-input v-model="examForm.name"></el-input>
+          </el-col>
+        </el-form-item>
+      </el-form>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="initName">取 消</el-button>
+        <el-button type="primary" @click="createExam">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 
 </template>
@@ -181,8 +210,10 @@ export default {
   name: "QuestionList",
   data() {
     return {
+      multipleSelection: [],
       tableData: [],
       categoryOptions: [],
+      centerDialogVisible: false,
       pageSize: 10,
       pageNum: 1,
       total: 0,
@@ -228,6 +259,12 @@ export default {
           label: '困难'
         }
       ],
+      examForm: {
+        id: '',
+        name: '',
+        studentId: '',
+        state: 0,
+      },
       student: '',
       id: '',
       body: '',
@@ -238,6 +275,67 @@ export default {
     }
   },
   methods: {
+    initName() {
+      this.centerDialogVisible = !this.centerDialogVisible
+      this.examForm.name = ''
+    },
+    createExam() {
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          message: '请先勾选要组卷的题目哦！！！',
+          type: 'error'
+        });
+      } else {
+        this.$axios.get(this.$httpUrl+'/exam/create').then(res=>res.data).then(res=>{
+          this.examForm.id = res.data.id
+
+          this.deleteRelation()
+
+          this.updateExam()
+
+          this.centerDialogVisible = false
+
+          let dataDb2 = {
+            exam: this.examForm,
+            questionList: this.multipleSelection
+          }
+          console.log(dataDb2)
+          this.$router.push({path: "/ReviewExamDetail", query: {pushData: dataDb2}})
+        })
+
+
+      }
+
+    },
+    deleteRelation() {
+      this.$axios.get(this.$httpUrl+'/relation/delete?id='+this.examForm.id).then(res=>res.data).then(res=>{
+        console.log(res)
+      })
+    },
+    updateExam() {
+      this.examForm.studentId = this.student.sid
+      let dataDb = {
+        exam: this.examForm,
+        questionList: this.multipleSelection
+      }
+      this.$axios.post(this.$httpUrl+'/exam/update', dataDb).then(res=>res.data).then(res=>{
+        if(res.code==200){
+          this.$message({
+            message: '操作成功！',
+            type: 'success'
+          });
+          this.examForm = res.data
+        }else{
+          this.$message({
+            message: '操作失败！',
+            type: 'error'
+          });
+        }
+      })
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
     viewDetail(row) {
       if (row.type === 0) {
         this.$router.push({path: "/ReviewOption", query: {pushData: row}})

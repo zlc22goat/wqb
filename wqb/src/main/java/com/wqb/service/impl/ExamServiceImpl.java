@@ -1,0 +1,31 @@
+package com.wqb.service.impl;
+
+import com.wqb.entity.Exam;
+import com.wqb.mapper.ExamMapper;
+import com.wqb.service.ExamService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wqb.vo.QuestionCourseVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author lincheon
+ * @since 2023-04-15
+ */
+@Service
+public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements ExamService {
+
+    @Autowired
+    private ExamMapper examMapper;
+
+    @Override
+    public List<QuestionCourseVo> selectDetail(Integer id) {
+        return examMapper.selectDetail(id);
+    }
+}
