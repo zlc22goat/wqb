@@ -1,8 +1,11 @@
 <template>
   <div>
 
-    <div>
-      <el-form v-for="(item,i) in questionList" :key="i">
+    <div id="demo">
+      <span style="text-align: center; display:block;
+      font-size: 30px; margin-top: 30px">{{exam.name}}</span>
+      <el-form v-for="(item,i) in questionList" :key="i" style="margin-left: 80px; margin-top: 80px">
+
         <template  v-if="item.type===0">
 
           <el-form-item label="题干" prop="body">
@@ -81,13 +84,14 @@
 </template>
 
 <script>
+import htmlToPdf from '@/utils/htmlToPdf'
 export default {
   name: "ReviewExamDetail",
   data() {
     return {
       exam: this.$route.query.pushData.exam,
       questionList: [],
-
+      htmlTitle: '',
     }
   },
   methods: {
@@ -101,9 +105,9 @@ export default {
     startTest() {
 
     },
-    exportPDF() {
-
-    },
+    exportPDF () {
+      htmlToPdf.downloadPDF(document.querySelector('#demo'), this.exam.name)
+    }
 
   },
   created() {
