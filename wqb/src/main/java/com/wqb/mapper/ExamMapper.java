@@ -21,4 +21,6 @@ public interface ExamMapper extends BaseMapper<Exam> {
     List<QuestionCourseVo> selectDetail(String id);
 
     List<Question> selectAllQuestion(String id);
+
+    Integer[] selectQuestionId(String id);
 }

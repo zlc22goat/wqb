@@ -10,8 +10,10 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -23,6 +25,8 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @since 2023-04-11
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="Question对象", description="")
 public class Question implements Serializable {

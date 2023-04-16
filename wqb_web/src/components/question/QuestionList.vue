@@ -188,7 +188,7 @@
         width="30%"
         center>
 
-      <el-form ref="form" :model="examForm" label-width="80px">
+      <el-form ref="examForm" :model="examForm" label-width="80px">
         <el-form-item label="" prop="name">
           <el-col :span="20">
             <el-input v-model="examForm.name"></el-input>
@@ -211,6 +211,7 @@ export default {
   data() {
     return {
       multipleSelection: [],
+      tableSelectData: [],
       tableData: [],
       categoryOptions: [],
       centerDialogVisible: false,
@@ -259,11 +260,15 @@ export default {
           label: '困难'
         }
       ],
+      hasData: this.$route.query.pushData,
       examForm: {
+        createTime: '',
         id: '',
+        mark: '',
         name: '',
+        number: '',
+        state: '',
         studentId: '',
-        state: 0,
       },
       student: '',
       id: '',
@@ -277,7 +282,9 @@ export default {
   methods: {
     initName() {
       this.centerDialogVisible = !this.centerDialogVisible
-      this.examForm.name = ''
+      if (this.examForm.id == "") {
+        this.examForm.name = ''
+      }
     },
     createExam() {
       if (this.multipleSelection.length === 0) {
@@ -286,9 +293,8 @@ export default {
           type: 'error'
         });
       } else {
-        this.$axios.get(this.$httpUrl+'/exam/create').then(res=>res.data).then(res=>{
-          this.examForm.id = res.data.id
 
+        if (this.examForm.id) {
           this.deleteRelation()
 
           this.updateExam()
@@ -299,13 +305,26 @@ export default {
             exam: this.examForm,
             questionList: this.multipleSelection
           }
-          console.log(dataOb2)
           this.$router.push({path: "/ReviewExamDetail", query: {pushData: dataOb2}})
-        })
 
+        } else {
+          this.$axios.get(this.$httpUrl+'/exam/create').then(res=>res.data).then(res=>{
+            this.examForm.id = res.data.id
 
+            this.deleteRelation()
+
+            this.updateExam()
+
+            this.centerDialogVisible = false
+
+            let dataOb2 = {
+              exam: this.examForm,
+              questionList: this.multipleSelection
+            }
+            this.$router.push({path: "/ReviewExamDetail", query: {pushData: dataOb2}})
+          })
+        }
       }
-
     },
     deleteRelation() {
       this.$axios.get(this.$httpUrl+'/relation/delete?id='+this.examForm.id).then(res=>res.data).then(res=>{
@@ -333,8 +352,8 @@ export default {
         }
       })
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
+    handleSelectionChange(rows) {
+      this.multipleSelection = rows;
     },
     viewDetail(row) {
       if (row.type === 0) {
@@ -400,24 +419,38 @@ export default {
           mastery: this.mastery
         }
       }).then(res=>res.data).then(res=>{
-        console.log(res)
         if(res.code==200){
           this.tableData=res.data
           this.total=res.total
+
+          if (typeof this.hasData != "undefined") {
+            this.multipleSelection.forEach(item => { // multipleSelection为已选数据
+              this.$nextTick( ()=>{
+                this.tableData.find(obj => { // tableData 表单数据
+                  if(item.id === obj.id) {
+                    this.$refs.multipleTable.toggleRowSelection(obj,true)
+                  }
+                })
+              })
+            })
+          }
         }else{
           alert('获取数据失败')
         }
-
       })
     },
     getOneCategory() {
       this.$axios.get(this.$httpUrl+'/course/list').then(res=>res.data).then(res=>{
-        console.log(res)
+        // console.log(res)
         this.categoryOptions = res.data;
       })
     },
     init(){
       this.student = JSON.parse(sessionStorage.getItem('CurUser'))
+      if (typeof this.hasData != "undefined") {
+        this.examForm = this.hasData.exam
+        this.multipleSelection = this.hasData.questionList
+      }
     },
   },
   beforeMount() {

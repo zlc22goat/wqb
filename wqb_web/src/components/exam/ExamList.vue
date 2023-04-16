@@ -140,7 +140,7 @@ export default {
           exam: row,
           questionList: this.multipleSelection
         }
-        console.log(dataOb)
+        // console.log(dataOb)
         this.$router.push({path: "/ReviewExamDetail", query: {pushData: dataOb}})
       })
 

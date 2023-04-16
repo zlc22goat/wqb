@@ -5,7 +5,6 @@ import com.wqb.entity.Question;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 

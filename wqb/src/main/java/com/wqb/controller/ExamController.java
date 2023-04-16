@@ -1,5 +1,6 @@
 package com.wqb.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,6 +12,7 @@ import com.wqb.entity.Question;
 import com.wqb.entity.Relation;
 import com.wqb.service.ExamService;
 import com.wqb.service.RelationService;
+import com.wqb.vo.QuestionCourseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +48,7 @@ public class ExamController {
         Exam exam = new Exam();
         Timestamp createTime = new Timestamp(new Date().getTime());
         exam.setCreateTime(createTime);
+        exam.setState(0);
         return examService.save(exam) ? Result.suc(exam) : Result.fail();
     }
 
@@ -125,10 +128,9 @@ public class ExamController {
         return Result.suc(examService.selectDetail(id));
     }
 
-    @GetMapping("/selectAllQuestion")
-    public Result selectAllQuestion(@RequestParam String id) {
-        List<Question> questionList = examService.selectAllQuestion(id);
-        return Result.suc(questionList);
+    @GetMapping("/selectQuestionId")
+    public Result selectQuestionId(@RequestParam String id) {
+        return Result.suc(examService.selectQuestionId(id));
     }
 }
 

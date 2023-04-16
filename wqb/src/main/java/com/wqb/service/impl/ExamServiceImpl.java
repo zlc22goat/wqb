@@ -34,4 +34,9 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     public List<Question> selectAllQuestion(String id) {
         return examMapper.selectAllQuestion(id);
     }
+
+    @Override
+    public Integer[] selectQuestionId(String id) {
+        return examMapper.selectQuestionId(id);
+    }
 }

@@ -108,7 +108,7 @@ export default {
       isCorrect: false,
       centerDialogVisible: false,
       hasData: this.$route.query.pushData,
-      checkList :[],
+      checkList: [],
       correctAnswer: '',
       myAnswer: '',
       form: {

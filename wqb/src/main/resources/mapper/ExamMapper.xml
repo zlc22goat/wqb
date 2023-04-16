@@ -24,6 +24,16 @@
         )
     </select>
 
+    <select id="selectQuestionId" resultType="java.lang.Integer">
+        select q.id
+        from Question q
+        where q.id in (
+            select question_id
+            from relation
+            where exam_id = #{id}
+        )
+    </select>
+
     <resultMap id="QuestionCourseVoMap" type="com.wqb.vo.QuestionCourseVo">
         <id property="id" column="id"></id>
         <result property="body" column="body"></result>

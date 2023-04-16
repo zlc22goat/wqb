@@ -19,4 +19,6 @@ public interface ExamService extends IService<Exam> {
     List<QuestionCourseVo> selectDetail(String id);
 
     List<Question> selectAllQuestion(String id);
+
+    Integer[] selectQuestionId(String id);
 }
