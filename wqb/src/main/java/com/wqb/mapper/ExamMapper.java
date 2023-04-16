@@ -2,6 +2,7 @@ package com.wqb.mapper;
 
 import com.wqb.entity.Exam;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wqb.entity.Question;
 import com.wqb.vo.QuestionCourseVo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,5 +18,7 @@ import java.util.List;
  */
 @Mapper
 public interface ExamMapper extends BaseMapper<Exam> {
-    List<QuestionCourseVo> selectDetail(Integer id);
+    List<QuestionCourseVo> selectDetail(String id);
+
+    List<Question> selectAllQuestion(String id);
 }

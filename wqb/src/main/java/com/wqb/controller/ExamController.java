@@ -1,15 +1,11 @@
 package com.wqb.controller;
 
-
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wqb.common.QueryPageParam;
 import com.wqb.common.Result;
-import com.wqb.dto.Params;
 import com.wqb.dto.QuestionListDto;
-import com.wqb.entity.Exam;
 import com.wqb.entity.Exam;
 import com.wqb.entity.Question;
 import com.wqb.entity.Relation;
@@ -19,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -90,16 +85,6 @@ public class ExamController {
 
 
     /**
-     * 查询某试卷的所有题目信息
-     * @param id
-     * @return
-     */
-    @PostMapping("/selectDetail")
-    public Result selectDetail(@RequestParam Integer id) {
-        return Result.suc(examService.selectDetail(id));
-    }
-
-    /**
      * 查询所有试卷信息，不包含详细什么题目
      * @param query
      * @return
@@ -109,12 +94,14 @@ public class ExamController {
         HashMap param = query.getParam();
         String name = (String)param.get("name");
         String state = (String) param.get("state");
+        Integer studentId = (Integer) param.get("studentId");
 
         Page<Exam> examPage = new Page<>();
         examPage.setCurrent(query.getPageNum());
         examPage.setSize(query.getPageSize());
 
         LambdaQueryWrapper<Exam> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Exam::getStudentId, studentId);
         if (!state.equals("")) {
             lambdaQueryWrapper.eq(Exam::getState, state);
         }
@@ -126,6 +113,22 @@ public class ExamController {
         IPage result = examService.page(examPage, lambdaQueryWrapper);
 
         return Result.suc(result.getRecords(), result.getTotal());
+    }
+
+    /**
+     * 查询某试卷的所有题目信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/selectDetail")
+    public Result selectDetail(@RequestParam String id) {
+        return Result.suc(examService.selectDetail(id));
+    }
+
+    @GetMapping("/selectAllQuestion")
+    public Result selectAllQuestion(@RequestParam String id) {
+        List<Question> questionList = examService.selectAllQuestion(id);
+        return Result.suc(questionList);
     }
 }
 

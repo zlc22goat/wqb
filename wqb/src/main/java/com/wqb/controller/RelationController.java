@@ -1,18 +1,11 @@
 package com.wqb.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wqb.common.Result;
-import com.wqb.entity.Question;
 import com.wqb.entity.Relation;
-import com.wqb.entity.Student;
 import com.wqb.service.RelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.invoke.LambdaConversionException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

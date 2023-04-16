@@ -1,6 +1,7 @@
 package com.wqb.service.impl;
 
 import com.wqb.entity.Exam;
+import com.wqb.entity.Question;
 import com.wqb.mapper.ExamMapper;
 import com.wqb.service.ExamService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -25,7 +26,12 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     private ExamMapper examMapper;
 
     @Override
-    public List<QuestionCourseVo> selectDetail(Integer id) {
+    public List<QuestionCourseVo> selectDetail(String id) {
         return examMapper.selectDetail(id);
+    }
+
+    @Override
+    public List<Question> selectAllQuestion(String id) {
+        return examMapper.selectAllQuestion(id);
     }
 }

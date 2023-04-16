@@ -295,12 +295,12 @@ export default {
 
           this.centerDialogVisible = false
 
-          let dataDb2 = {
+          let dataOb2 = {
             exam: this.examForm,
             questionList: this.multipleSelection
           }
-          console.log(dataDb2)
-          this.$router.push({path: "/ReviewExamDetail", query: {pushData: dataDb2}})
+          console.log(dataOb2)
+          this.$router.push({path: "/ReviewExamDetail", query: {pushData: dataOb2}})
         })
 
 
@@ -314,11 +314,11 @@ export default {
     },
     updateExam() {
       this.examForm.studentId = this.student.sid
-      let dataDb = {
+      let dataOb = {
         exam: this.examForm,
         questionList: this.multipleSelection
       }
-      this.$axios.post(this.$httpUrl+'/exam/update', dataDb).then(res=>res.data).then(res=>{
+      this.$axios.post(this.$httpUrl+'/exam/update', dataOb).then(res=>res.data).then(res=>{
         if(res.code==200){
           this.$message({
             message: '操作成功！',

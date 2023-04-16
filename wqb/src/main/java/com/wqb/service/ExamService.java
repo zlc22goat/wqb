@@ -2,6 +2,7 @@ package com.wqb.service;
 
 import com.wqb.entity.Exam;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wqb.entity.Question;
 import com.wqb.vo.QuestionCourseVo;
 
 import java.util.List;
@@ -15,5 +16,7 @@ import java.util.List;
  * @since 2023-04-15
  */
 public interface ExamService extends IService<Exam> {
-    List<QuestionCourseVo> selectDetail(Integer id);
+    List<QuestionCourseVo> selectDetail(String id);
+
+    List<Question> selectAllQuestion(String id);
 }
