@@ -282,7 +282,7 @@ export default {
   methods: {
     initName() {
       this.centerDialogVisible = !this.centerDialogVisible
-      if (this.examForm.id == "") {
+      if (this.examForm.id === "") {
         this.examForm.name = ''
       }
     },
