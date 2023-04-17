@@ -2,19 +2,17 @@ package com.wqb.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wqb.common.Result;
 import com.wqb.dto.AnswerDto;
 import com.wqb.dto.Params;
 import com.wqb.entity.Answer;
 import com.wqb.entity.Question;
+import com.wqb.entity.Student;
 import com.wqb.mapper.AnswerMapper;
 import com.wqb.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Array;
 import java.sql.Timestamp;
@@ -73,6 +71,14 @@ public class AnswerController {
 //        answer.setQuestionId(questionId);
 
         return answerService.save(answer) ? Result.suc(answer) : Result.fail();
+    }
+
+    @PostMapping("/selectAllAnswer")
+    public Result selectAllAnswer(@RequestParam String id) {
+        List<Answer> answerList = answerService.lambdaQuery().
+                eq(Answer::getQuestionId, id)
+                .orderByDesc(Answer::getCreateTime).list();
+        return answerList.size() > 0 ? Result.suc(answerList) : Result.fail();
     }
 
 }

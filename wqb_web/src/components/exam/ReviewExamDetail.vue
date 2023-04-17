@@ -6,9 +6,11 @@
       font-size: 30px; margin-top: 30px">{{exam.name}}</span>
       <el-form v-for="(item,i) in questionList" :key="i" style="margin-left: 80px; margin-top: 80px">
 
+        <span>第{{i+1}}题</span>
+
         <template  v-if="item.type===0">
 
-          <el-form-item label="题干" prop="body">
+          <el-form-item label="" prop="body">
             <el-col :span="20">
               <td>{{item.body}}</td>
               <el-image :src="item.bodyPic" v-if="item.bodyPic !== ''">

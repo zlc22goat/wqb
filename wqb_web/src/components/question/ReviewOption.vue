@@ -68,6 +68,7 @@
 
         <el-button type="danger" @click="resetForm">重 选</el-button>
         <el-button type="primary" @click="save">确 定</el-button>
+        <el-button type="warning" @click="showHistory">查看历史</el-button>
 
       </el-form>
     </div>
@@ -95,6 +96,40 @@
       </el-form>
 
     </div>
+
+    <el-drawer
+        title="历史做题记录"
+        :visible.sync="isShowHistory">
+
+      <el-form v-if="myHistoryAnswer === null">
+        <span style="text-align: center; display:block;">暂时没有做题记录喔！</span>
+      </el-form>
+
+      <el-form v-for="(item,i) in myHistoryAnswer" :key="i" style="margin-left: 80px; margin-top: 80px">
+
+        <el-form-item label="时间" prop="createTime">
+          <el-col :span="20">
+            <td>{{item.createTime}}</td>
+<!--            <el-image :src="item.bodyPic" v-if="item.bodyPic !== ''">-->
+<!--              <div slot="error" class="image-slot"></div>-->
+<!--            </el-image>-->
+          </el-col>
+        </el-form-item>
+
+        <el-form-item label="我的答案" prop="myAnswerOption">
+          <el-col :span="20">
+            <td>{{item.myAnswerOption}}</td>
+<!--            <el-image :src="item.bodyPic" v-if="item.bodyPic !== ''">-->
+<!--              <div slot="error" class="image-slot"></div>-->
+<!--            </el-image>-->
+          </el-col>
+        </el-form-item>
+
+        <el-divider></el-divider>
+
+      </el-form>
+
+    </el-drawer>
   </div>
 </template>
 
@@ -104,11 +139,13 @@ export default {
   name: "ReviewOption",
   data() {
     return {
+      isShowHistory: false,
       isAnswer: false,
       isCorrect: false,
       centerDialogVisible: false,
       hasData: this.$route.query.pushData,
       checkList: [],
+      myHistoryAnswer: [],
       correctAnswer: '',
       myAnswer: '',
       form: {
@@ -171,12 +208,7 @@ export default {
         strings: this.checkList
       }
       this.$axios.post(this.$httpUrl+'/answer/save', dataOb).then(res=>res.data).then(res=>{
-        // console.log("save")
         if(res.code===200){
-          // this.$message({
-          //   message: '操作成功！',
-          //   type: 'success'
-          // });
           this.searchAnswerAndJudge(res.data.myAnswerOption)
         }else{
           this.$message({
@@ -187,7 +219,12 @@ export default {
       })
 
     },
-
+    showHistory() {
+      this.isShowHistory = true
+      this.$axios.post(this.$httpUrl+'/answer/selectAllAnswer?id=' + this.hasData.id).then(res=>res.data).then(res=>{
+        this.myHistoryAnswer = res.data
+      })
+    },
     resetForm(){
       this.checkList = []
     },
