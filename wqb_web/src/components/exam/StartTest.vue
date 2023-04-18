@@ -1,13 +1,6 @@
 <template>
   <div>
 
-    <template>
-      <div>
-        <el-button type="danger" style="margin-left: 5px;" @click="save">提 交</el-button>
-        <el-button type="success" style="margin-left: 5px;" @click="resetParam">重 置</el-button>
-      </div>
-    </template>
-
     <div>
       <span style="text-align: center; display:block;
       font-size: 30px; margin-top: 30px">{{exam.name}}</span>
@@ -116,6 +109,13 @@
 
     </div>
 
+    <template>
+      <div>
+        <el-button type="danger" style="margin-left: 5px;" @click="save">交 卷</el-button>
+        <el-button type="success" style="margin-left: 5px;" @click="resetParam">重 答</el-button>
+      </div>
+    </template>
+
     <el-dialog
         title=""
         :visible.sync="centerDialogVisible"
@@ -198,6 +198,9 @@ export default {
         this.$axios.post(this.$httpUrl+'/answer/save', dataOb).then(res=>res.data).then(res=>{
           if(res.code===200){
             this.searchAnswerAndJudge(res.data, i)
+            if (i === this.questionList.length - 1) {
+              this.updateExam()
+            }
           }else{
             this.$message({
               message: '操作失败！',
@@ -205,18 +208,16 @@ export default {
             });
           }
         })
-
       }
       this.centerDialogVisible = true
       this.resetParam()
       this.exam.mark = ''
     },
     updateExam() {
-      let dataOb2 = {
-        exam: this.exam,
-        questionList: this.questionList
-      }
-      this.$axios.post(this.$httpUrl+'/exam/update', dataOb2).then(res=>res.data).then(res=>{
+      // 更新到exam
+      this.exam.state = 1
+      this.$axios.post(this.$httpUrl+'/exam/updateExam', this.exam).then(res=>res.data).then(res=>{
+        // console.log(this.exam)
         if(res.code==200){
           this.$message({
             message: '操作成功！',

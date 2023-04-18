@@ -10,6 +10,7 @@ import com.wqb.dto.QuestionListDto;
 import com.wqb.entity.Exam;
 import com.wqb.entity.Question;
 import com.wqb.entity.Relation;
+import com.wqb.entity.Student;
 import com.wqb.service.ExamService;
 import com.wqb.service.RelationService;
 import com.wqb.vo.QuestionCourseVo;
@@ -59,6 +60,11 @@ public class ExamController {
         return examService.save(exam) ? Result.suc() : Result.fail();
     }
 
+    /**
+     * 更新
+     * @param questionListExam
+     * @return
+     */
     @PostMapping("/update")
     public Result update(@RequestBody QuestionListDto questionListExam) {
         Exam exam = questionListExam.getExam();
@@ -79,6 +85,11 @@ public class ExamController {
         }
 
         return examService.updateById(exam) ? Result.suc(exam) : Result.fail();
+    }
+
+    @PostMapping("/updateExam")
+    public Result updateExam(@RequestBody Exam exam) {
+        return examService.updateById(exam) ? Result.suc() : Result.fail();
     }
 
     @GetMapping("/del")
