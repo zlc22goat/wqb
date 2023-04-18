@@ -264,7 +264,7 @@ export default {
       examForm: {
         createTime: '',
         id: '',
-        mark: '',
+        mark: 0,
         name: '',
         number: '',
         state: '',

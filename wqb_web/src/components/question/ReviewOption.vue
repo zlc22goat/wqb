@@ -217,7 +217,7 @@ export default {
           });
         }
       })
-
+      this.checkList = []
     },
     showHistory() {
       this.isShowHistory = true

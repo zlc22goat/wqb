@@ -38,8 +38,14 @@ public class AnswerController {
 
     @PostMapping("/save")
     public Result save(@RequestBody AnswerDto param) {
-        Answer answer = new Answer();
+        Answer answer;
+        if (param.getAnswer() != null) {
+            answer = param.getAnswer();
+        } else {
+            answer = new Answer();
+        }
 
+        // 处理选择题
         if (param.getStrings() != null) {
             String[] strings = param.getStrings();
             Arrays.sort(strings);
@@ -53,13 +59,51 @@ public class AnswerController {
             answer.setMyAnswerOption(str);
         }
 
-        Integer questionId = param.getId();
+        if (param.getId() != null) {
+            Integer questionId = param.getId();
+            answer.setQuestionId(questionId);
+        }
+
         Timestamp createTime = new Timestamp(new Date().getTime());
         answer.setCreateTime(createTime);
-        answer.setQuestionId(questionId);
 
         return answerService.save(answer) ? Result.suc(answer) : Result.fail();
     }
+
+//    @PostMapping("/saveAnswerList")
+//    public Result saveAnswerList(@RequestBody AnswerDto param) {
+//        List<Answer> answerList = new ArrayList<>();
+//
+//        if (param.getStrings() != null) {
+//            String[] strings = param.getStrings();
+//            Arrays.sort(strings);
+//            StringBuilder stringBuilder = new StringBuilder();
+//            for (int i = 0; i < strings.length; i++) {
+//                if (strings[i] != null) {
+//                    stringBuilder.append(strings[i]);
+//                }
+//            }
+//            String str = stringBuilder.toString();
+//            answer.setMyAnswerOption(str);
+//        }
+//
+//        List<Question> questionList = param.getQuestionList();
+//        for (Question question: questionList) {
+//            if (question != null) {
+//                Answer answer = new Answer();
+//
+//                answer.setCreateTime(new Date());
+//                answer.setQuestionId(question.getId());
+//            }
+//        }
+//
+//        Integer questionId = param.getId();
+//        Timestamp createTime = new Timestamp(new Date().getTime());
+//        answer.setCreateTime(createTime);
+//        answer.setQuestionId(questionId);
+//
+//        return answerService.save(answer) ? Result.suc(answer) : Result.fail();
+//    }
 
     @PostMapping("/savePic")
     public Result savePic(@RequestBody Answer answer) {

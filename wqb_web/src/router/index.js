@@ -45,6 +45,11 @@ const routes = [
                 name:'ReviewExamDetail',
                 component:()=>import('../components/exam/ReviewExamDetail')
             },
+            {
+                path:'/StartTest',
+                name:'StartTest',
+                component:()=>import('../components/exam/StartTest')
+            },
             // {
             //     path:'/Admin',
             //     name:'admin',
