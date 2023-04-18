@@ -2,12 +2,12 @@
   <div>
     <div style="width: 50%;  float: left">
       <!--      <label>题目预览</label>-->
-      <el-form ref="form" :model="hasData" label-width="80px">
+      <el-form ref="form" :model="form" label-width="80px">
 
         <el-form-item label="题干" prop="body">
           <el-col :span="20">
-            <td>{{hasData.body}}</td>
-            <el-image :src="hasData.bodyPic" v-if="hasData.bodyPic !== ''">
+            <td>{{form.body}}</td>
+            <el-image :src="form.bodyPic" v-if="form.bodyPic !== ''">
               <div slot="error" class="image-slot"></div>
             </el-image>
           </el-col>
@@ -16,7 +16,7 @@
         <el-form-item label="" prop="level">
           <el-col :span="20">
             <div class="block">
-              <el-rate v-model="hasData.level" disabled></el-rate>
+              <el-rate v-model="form.level" disabled></el-rate>
             </div>
           </el-col>
         </el-form-item><br>
@@ -53,6 +53,7 @@
 
         <el-button type="danger" @click="resetForm">重 答</el-button>
         <el-button type="primary" @click="save">确 定</el-button>
+        <el-button type="info" @click="back">返 回</el-button>
         <el-button type="warning" @click="showHistory">查看历史</el-button>
 
       </el-form>
@@ -71,12 +72,12 @@
         </el-form-item>
       </el-form>
 
-      <el-form ref="form" :model="hasData" label-width="80px">
+      <el-form ref="form" :model="form" label-width="80px">
 
         <el-form-item label="正确答案">
           <el-col :span="20">
-            <td>{{hasData.answer}}</td>
-            <el-image :src="hasData.answerPic" v-if="hasData.answerPic !== ''">
+            <td>{{form.answer}}</td>
+            <el-image :src="form.answerPic" v-if="form.answerPic !== ''">
               <div slot="error" class="image-slot"></div>
             </el-image>
           </el-col>
@@ -84,8 +85,8 @@
         <br>
 
         <el-form-item label="解析:">
-          <td>{{ hasData.detail }}</td>
-          <el-image :src="hasData.detailPic" v-if="hasData.detailPic !== ''">
+          <td>{{ form.detail }}</td>
+          <el-image :src="form.detailPic" v-if="form.detailPic !== ''">
             <div slot="error" class="image-slot"></div>
           </el-image>
         </el-form-item>
@@ -145,6 +146,7 @@ export default {
       correctAnswer: '',
       correctAnswerPic: '',
       myAnswer: '',
+      exam: '',
       form: {
         id: '',
         remark: '',
@@ -159,15 +161,24 @@ export default {
   },
   methods:{
     init(){
-      if (typeof this.hasData != "undefined") {
-        this.form.id = this.hasData.id
-        this.form.remark = this.hasData.remark
+      if (typeof this.hasData.questionList != "undefined") {
+        this.form = this.hasData.questionList
+        this.exam = this.hasData.exam
+      } else if (typeof this.hasData != "undefined") {
+        // this.form.id = this.hasData.id
+        // this.form.remark = this.hasData.remark
+        this.form = this.hasData
         this.answerForm.questionId = this.hasData.id
       }
+      // if (typeof this.hasData != "undefined") {
+      //   this.form.id = this.hasData.id
+      //   this.form.remark = this.hasData.remark
+      //
+      // }
     },
     mod() {
       let dataOb = {
-        question: this.hasData,
+        question: this.form,
       }
       this.$axios.post(this.$httpUrl+'/question/update',dataOb).then(res=>res.data).then(res=>{
         // console.log(res)
@@ -213,7 +224,7 @@ export default {
     },
     showHistory() {
       this.isShowHistory = true
-      this.$axios.post(this.$httpUrl+'/answer/selectAllAnswer?id=' + this.hasData.id).then(res=>res.data).then(res=>{
+      this.$axios.post(this.$httpUrl+'/answer/selectAllAnswer?id=' + this.form.id).then(res=>res.data).then(res=>{
         this.myHistoryAnswer = res.data
       })
     },
@@ -241,12 +252,26 @@ export default {
       this.answerForm.myAnswer = ''
       this.isAnswer = false
     },
+    back() {
+      if (this.exam === '') {
+        this.$router.push({path: "/QuestionList"})
+      } else {
+        this.$axios.get(this.$httpUrl+'/exam/selectDetail?id=' + this.exam.id).then(res=>res.data).then(res=>{
+          let dataOb = {
+            exam: this.exam,
+            questionList: res.data
+          }
+          this.$router.push({path: "/StartTest", query: {pushData: dataOb}})
+        })
+
+      }
+    },
     returnBack() {
-      if (this.hasData.mastery !== 0)  this.hasData.mastery = this.hasData.mastery - 1
+      if (this.form.mastery !== 0)  this.form.mastery = this.form.mastery - 1
       this.mod()
     },
     returnOk() {
-      if (this.hasData.mastery !== 2)  this.hasData.mastery = this.hasData.mastery + 1
+      if (this.form.mastery !== 2)  this.form.mastery = this.form.mastery + 1
       this.mod()
     },
   },

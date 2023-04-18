@@ -2,12 +2,12 @@
   <div>
     <div style="width: 50%;  float: left">
 <!--      <label>题目预览</label>-->
-      <el-form ref="form" :model="hasData" label-width="80px">
+      <el-form ref="form" :model="form" label-width="80px">
 
         <el-form-item label="题干" prop="body">
           <el-col :span="20">
-            <td>{{hasData.body}}</td>
-            <el-image :src="hasData.bodyPic" v-if="hasData.bodyPic !== ''">
+            <td>{{form.body}}</td>
+            <el-image :src="form.bodyPic" v-if="form.bodyPic !== ''">
               <div slot="error" class="image-slot"></div>
             </el-image>
           </el-col>
@@ -15,8 +15,8 @@
 
         <el-form-item label="A" prop="optiona">
           <el-col :span="20">
-            <td>{{hasData.optiona}}</td>
-            <el-image :src="hasData.optionaPic" v-if="hasData.optionaPic !== ''">
+            <td>{{form.optiona}}</td>
+            <el-image :src="form.optionaPic" v-if="form.optionaPic !== ''">
               <div slot="error" class="image-slot"></div>
             </el-image>
           </el-col>
@@ -24,8 +24,8 @@
 
         <el-form-item label="B" prop="optionb">
           <el-col :span="20">
-            <td>{{hasData.optionb}}</td>
-            <el-image :src="hasData.optionbPic" v-if="hasData.optionbPic !== ''">
+            <td>{{form.optionb}}</td>
+            <el-image :src="form.optionbPic" v-if="form.optionbPic !== ''">
               <div slot="error" class="image-slot"></div>
             </el-image>
           </el-col>
@@ -33,8 +33,8 @@
 
         <el-form-item label="C" prop="optionc">
           <el-col :span="20">
-            <td>{{hasData.optionc}}</td>
-            <el-image :src="hasData.optioncPic" v-if="hasData.optioncPic !== ''">
+            <td>{{form.optionc}}</td>
+            <el-image :src="form.optioncPic" v-if="form.optioncPic !== ''">
               <div slot="error" class="image-slot"></div>
             </el-image>
           </el-col>
@@ -42,8 +42,8 @@
 
         <el-form-item label="D" prop="optiond">
           <el-col :span="20">
-            <td>{{hasData.optiond}}</td>
-            <el-image :src="form.optiondPic" v-if="hasData.optiondPic !== ''">
+            <td>{{form.optiond}}</td>
+            <el-image :src="form.optiondPic" v-if="form.optiondPic !== ''">
               <div slot="error" class="image-slot"></div>
             </el-image>
           </el-col>
@@ -52,7 +52,7 @@
         <el-form-item label="" prop="level">
           <el-col :span="20">
             <div class="block">
-              <el-rate v-model="hasData.level" disabled></el-rate>
+              <el-rate v-model="form.level" disabled></el-rate>
             </div>
           </el-col>
         </el-form-item><br>
@@ -68,21 +68,22 @@
 
         <el-button type="danger" @click="resetForm">重 选</el-button>
         <el-button type="primary" @click="save">确 定</el-button>
+        <el-button type="info" @click="back">返 回</el-button>
         <el-button type="warning" @click="showHistory">查看历史</el-button>
 
       </el-form>
     </div>
 
     <div style="width: 50%; float:right;" v-if="this.isAnswer === true">
-      <el-form ref="form" :model="hasData" label-width="80px">
+      <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="正确答案:">
           <td>{{ this.correctAnswer }}</td>
         </el-form-item>
         <br>
 
         <el-form-item label="解析:">
-          <td>{{ this.hasData.detail }}</td>
-          <el-image :src="this.hasData.detailPic" v-if="this.hasData.detailPic !== ''">
+          <td>{{ this.form.detail }}</td>
+          <el-image :src="this.form.detailPic" v-if="this.form.detailPic !== ''">
             <div slot="error" class="image-slot"></div>
           </el-image>
         </el-form-item>
@@ -158,13 +159,18 @@ export default {
   },
   methods:{
     init(){
-      if (typeof this.hasData != "undefined") {
-        this.form.id = this.hasData.id
-        this.form.remark = this.hasData.remark
+      if (typeof this.hasData.questionList != "undefined") {
+        this.form = this.hasData.questionList
+        this.exam = this.hasData.exam
+      } else if (typeof this.hasData != "undefined") {
+        // this.form.id = this.hasData.id
+        // this.form.remark = this.hasData.remark
+        this.form = this.hasData
       }
+      // console.log(1,this.form, this.exam)
     },
     searchAnswerAndJudge(op) {
-      this.$axios.post(this.$httpUrl+'/question/findById?id=' + this.hasData.id).then(res=>res.data).then(res=>{
+      this.$axios.post(this.$httpUrl+'/question/findById?id=' + this.form.id).then(res=>res.data).then(res=>{
         this.correctAnswer = res.data.answerOption
         if (op === this.correctAnswer) {
           this.$message({
@@ -183,7 +189,7 @@ export default {
     },
     mod() {
       let dataOb = {
-        question: this.hasData,
+        question: this.form,
         list: this.checkList
       }
       this.$axios.post(this.$httpUrl+'/question/update',dataOb).then(res=>res.data).then(res=>{
@@ -205,7 +211,7 @@ export default {
     },
     save(){
       let dataOb = {
-        id: this.hasData.id,
+        id: this.form.id,
         strings: this.checkList
       }
       this.$axios.post(this.$httpUrl+'/answer/save', dataOb).then(res=>res.data).then(res=>{
@@ -222,19 +228,33 @@ export default {
     },
     showHistory() {
       this.isShowHistory = true
-      this.$axios.post(this.$httpUrl+'/answer/selectAllAnswer?id=' + this.hasData.id).then(res=>res.data).then(res=>{
+      this.$axios.post(this.$httpUrl+'/answer/selectAllAnswer?id=' + this.form.id).then(res=>res.data).then(res=>{
         this.myHistoryAnswer = res.data
       })
     },
     resetForm(){
       this.checkList = []
     },
+    back() {
+      if (this.exam === '') {
+        this.$router.push({path: "/QuestionList"})
+      } else {
+        this.$axios.get(this.$httpUrl+'/exam/selectDetail?id=' + this.exam.id).then(res=>res.data).then(res=>{
+          let dataOb = {
+            exam: this.exam,
+            questionList: res.data
+          }
+          this.$router.push({path: "/StartTest", query: {pushData: dataOb}})
+        })
+
+      }
+    },
     returnBack() {
-      if (this.hasData.mastery !== 0)  this.hasData.mastery = this.hasData.mastery - 1
+      if (this.form.mastery !== 0)  this.form.mastery = this.form.mastery - 1
       this.mod()
     },
     returnOk() {
-      if (this.hasData.mastery !== 2)  this.hasData.mastery = this.hasData.mastery + 1
+      if (this.form.mastery !== 2)  this.form.mastery = this.form.mastery + 1
       this.mod()
     },
   },

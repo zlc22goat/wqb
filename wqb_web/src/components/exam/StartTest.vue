@@ -7,6 +7,10 @@
       <el-form v-for="(item,i) in questionList" :key="i" style="margin-left: 80px; margin-top: 80px">
 
         <span>第{{i+1}}题</span>
+        <span>
+          <el-button type="warning" size="small" style="margin-left: 10px"
+          v-if="isAnswer === true" @click="showQuestion(i)">查看题目详情</el-button>
+        </span>
 
         <template  v-if="item.type===0">
 
@@ -309,6 +313,17 @@ export default {
         this.answerForms[j].myAnswer = ''
         this.answerForms[j].myAnswerPic = ''
         this.checkList[j] = []
+      }
+    },
+    showQuestion(i) {
+      let dataOb = {
+        exam: this.exam,
+        questionList: this.questionList[i]
+      }
+      if (this.questionList[i].type === 0) {
+        this.$router.push({path: "/ReviewOption", query: {pushData: dataOb}})
+      } else {
+        this.$router.push({path: "/ReviewOther", query: {pushData: dataOb}})
       }
     },
     back() {
