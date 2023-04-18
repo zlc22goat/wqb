@@ -142,6 +142,7 @@ export default {
       isShowHistory: false,
       isAnswer: false,
       isCorrect: false,
+      exam: '',
       centerDialogVisible: false,
       hasData: this.$route.query.pushData,
       checkList: [],

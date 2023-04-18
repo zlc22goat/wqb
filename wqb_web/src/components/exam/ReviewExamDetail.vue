@@ -5,6 +5,7 @@
       <div>
         <el-button type="danger" style="margin-left: 5px;" @click="modExam">修改</el-button>
         <el-button type="success" style="margin-left: 5px;" @click="startTest">在线测试</el-button>
+        <el-button type="info" style="margin-left: 5px;" @click="back">返 回</el-button>
         <el-button type="warning" style="margin-left: 5px;" @click="exportPDF">导出</el-button>
       </div>
     </template>
@@ -112,6 +113,9 @@ export default {
     startTest() {
       let dataOb = this.$route.query.pushData
       this.$router.push({path: "/StartTest", query: {pushData: dataOb}})
+    },
+    back() {
+      this.$router.push({path: "/ExamList"})
     },
     exportPDF () {
       htmlToPdf.downloadPDF(document.querySelector('#demo'), this.exam.name)

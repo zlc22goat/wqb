@@ -213,6 +213,7 @@
 
         <el-button type="danger" @click="resetForm">重 置</el-button>
         <el-button type="primary" @click="doSave">确 定</el-button>
+        <el-button type="info" @click="back">返 回</el-button>
       </el-form>
     </div>
     <div style="width: 50%;  float: right">
@@ -474,6 +475,9 @@ export default {
       this.form.courseId = ''
       this.form.remark = ''
       this.checkList = []
+    },
+    back() {
+      this.$router.push({path: "/QuestionList"})
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);

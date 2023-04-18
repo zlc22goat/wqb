@@ -113,6 +113,7 @@
       <div>
         <el-button type="success" style="margin-left: 5px;" @click="save">交 卷</el-button>
         <el-button type="danger" style="margin-left: 5px;" @click="resetParam">重 答</el-button>
+        <el-button type="info" style="margin-left: 5px;" @click="back">返 回</el-button>
         <el-button type="warning" style="margin-left: 5px;" v-if="isAnswer === true"
                    @click="isShowCorrect = true">查看正确答案</el-button>
       </div>
@@ -309,6 +310,13 @@ export default {
         this.answerForms[j].myAnswerPic = ''
         this.checkList[j] = []
       }
+    },
+    back() {
+      let dataOb = {
+        exam: this.exam,
+        questionList: this.questionList
+      }
+      this.$router.push({path: "/ReviewExamDetail", query: {pushData: dataOb}})
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
