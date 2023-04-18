@@ -111,8 +111,10 @@
 
     <template>
       <div>
-        <el-button type="danger" style="margin-left: 5px;" @click="save">交 卷</el-button>
-        <el-button type="success" style="margin-left: 5px;" @click="resetParam">重 答</el-button>
+        <el-button type="success" style="margin-left: 5px;" @click="save">交 卷</el-button>
+        <el-button type="danger" style="margin-left: 5px;" @click="resetParam">重 答</el-button>
+        <el-button type="warning" style="margin-left: 5px;" v-if="isAnswer === true"
+                   @click="isShowCorrect = true">查看正确答案</el-button>
       </div>
     </template>
 
@@ -135,6 +137,57 @@
     </el-dialog>
 
     <el-backtop></el-backtop>
+
+    <el-drawer
+        title="答案解析"
+        :visible.sync="isShowCorrect">
+
+      <el-form v-for="(item,i) in questionList" :key="i" style="margin-left: 80px; margin-top: 80px">
+
+        <span>第{{i+1}}题</span>
+
+        <template v-if="item.type === 0">
+          <el-form-item label="正确答案" prop="myAnswerOption">
+            <el-col :span="20">
+              <td>{{item.answerOption}}</td>
+            </el-col>
+          </el-form-item>
+
+          <el-form-item label="解析" prop="detail">
+            <el-col :span="20">
+              <td>{{item.detail}}</td>
+              <el-image :src="item.detail" v-if="item.detail !== ''">
+                <div slot="error" class="image-slot"></div>
+              </el-image>
+            </el-col>
+          </el-form-item>
+        </template>
+
+        <template v-if="item.type === 1">
+          <el-form-item label="正确答案" prop="myAnswerOption">
+            <el-col :span="20">
+              <td>{{item.answer}}</td>
+              <el-image :src="item.answerPic" v-if="item.answerPic !== ''">
+                <div slot="error" class="image-slot"></div>
+              </el-image>
+            </el-col>
+          </el-form-item>
+
+          <el-form-item label="解析" prop="detail">
+            <el-col :span="20">
+              <td>{{item.detail}}</td>
+              <el-image :src="item.detailPic" v-if="item.detailPic !== ''">
+                <div slot="error" class="image-slot"></div>
+              </el-image>
+            </el-col>
+          </el-form-item>
+        </template>
+
+        <el-divider></el-divider>
+
+      </el-form>
+
+    </el-drawer>
   </div>
 </template>
 
@@ -143,6 +196,8 @@ export default {
   name: "StartTest",
   data() {
     return {
+      isAnswer: false,
+      isShowCorrect: false,
       centerDialogVisible: false,
       perMark: 0,
       exam: this.$route.query.pushData.exam,
@@ -170,6 +225,12 @@ export default {
       }
       this.perMark = 100 / this.questionList.length
     },
+    deMastery(q) {
+      if (q.mastery !== 0)  q.mastery = q.mastery - 1
+    },
+    inMastery(q) {
+      if (q.mastery !== 2)  q.mastery = q.mastery + 1
+    },
     // 计算分数
     searchAnswerAndJudge(result, i) {
       this.question = this.questionList[i]
@@ -177,12 +238,22 @@ export default {
         // 这里类型不同，不能用===
         if (result.myAnswerOption == this.question.answerOption) {
           this.exam.mark = Number(this.perMark) + Number(this.exam.mark);
+          this.inMastery(this.question)
+        } else {
+          this.deMastery(this.question)
         }
       } else {
         if (result.myAnswer == this.question.answer) {
           this.exam.mark = Number(this.perMark) + Number(this.exam.mark);
+          this.inMastery(this.question)
+        } else {
+          this.deMastery(this.question)
         }
       }
+      // 更新question的mastery
+      this.$axios.post(this.$httpUrl+'/question/updateQuestion', this.question).then(res=>res.data).then(res=>{
+        console.log(res)
+      })
     },
 
     // 如果标签嵌套太深，会导致无法获取到 DOM，这是我们需要 $forceUpdate() 强制刷新，才可获取
@@ -190,6 +261,7 @@ export default {
       this.$forceUpdate()
     },
     save(){
+      this.isAnswer = true
       for(let i = 0; i < this.questionList.length; i++) {
         let dataOb = {
           answer: this.answerForms[i],
@@ -210,7 +282,7 @@ export default {
         })
       }
       this.centerDialogVisible = true
-      this.resetParam()
+      // this.resetParam()
       this.exam.mark = ''
     },
     updateExam() {

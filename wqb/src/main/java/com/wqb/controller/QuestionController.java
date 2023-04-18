@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wqb.common.QueryPageParam;
 import com.wqb.common.Result;
 import com.wqb.dto.Params;
+import com.wqb.entity.Exam;
 import com.wqb.entity.Question;
 import com.wqb.service.MenuService;
 import com.wqb.service.QuestionService;
@@ -51,6 +52,12 @@ public class QuestionController {
 //        IPage res = questionService.selectAll(questionPage);
 //        return Result.suc(res.getRecords());
 //    }
+
+    @PostMapping("/updateQuestion")
+    public Result updateQuestion(@RequestBody Question question) {
+        question.setUpdateTime(new Date());
+        return questionService.updateById(question) ? Result.suc(question) : Result.fail();
+    }
 
     @PostMapping("/save")
     public Result save(@RequestBody Params param) {
