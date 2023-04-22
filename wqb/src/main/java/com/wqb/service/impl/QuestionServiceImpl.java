@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -28,6 +30,35 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         return questionMapper.selectQuestion(page, wrapper);
     }
 
+    @Override
+    public List getMastery(Wrapper wrapper) {
+        return questionMapper.getMastery(wrapper);
+    }
+
+    @Override
+    public List getLevel(Wrapper wrapper) {
+        return questionMapper.getLevel(wrapper);
+    }
+
+    @Override
+    public List getCourse(Wrapper wrapper) {
+        return questionMapper.getCourse(wrapper);
+    }
+
+    @Override
+    public List getReview(Wrapper wrapper) {
+        return questionMapper.getReview(wrapper);
+    }
+
+    @Override
+    public List<Map<Integer, Integer>> getNewQue(String id) {
+        return questionMapper.getNewQue(id);
+    }
+
+    @Override
+    public List<Map<Integer, Integer>> getUpdateQue(String id) {
+        return questionMapper.getUpdateQue(id);
+    }
 //    @Override
 //    public IPage selectAll(IPage<Question> page) {
 //        return questionMapper.selectAll(page);

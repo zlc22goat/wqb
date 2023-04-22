@@ -11,6 +11,7 @@ import com.wqb.entity.Exam;
 import com.wqb.entity.Question;
 import com.wqb.service.MenuService;
 import com.wqb.service.QuestionService;
+import com.wqb.vo.MasteryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,9 +98,6 @@ public class QuestionController {
             }
             question.setAnswerOption(stringBuilder.toString());
         }
-
-        Timestamp createTime = new Timestamp(new Date().getTime());
-        question.setUpdateTime(createTime);
         return questionService.updateById(question) ? Result.suc() : Result.fail();
     }
 
@@ -196,6 +194,48 @@ public class QuestionController {
         IPage result = questionService.selectQuestion(questionPage, lambdaQueryWrapper);
 
         return Result.suc(result.getRecords(), result.getTotal());
+    }
+
+    @GetMapping("/getMastery")
+    public Result getMastery(@RequestParam String id) {
+        LambdaQueryWrapper<Question> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Question::getStudentId, id)
+                .groupBy(Question::getMastery);
+        return Result.suc(questionService.getMastery(lambdaQueryWrapper));
+    }
+
+    @GetMapping("/getLevel")
+    public Result getLevel(@RequestParam String id) {
+        LambdaQueryWrapper<Question> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Question::getStudentId, id)
+                .groupBy(Question::getLevel);
+        return Result.suc(questionService.getLevel(lambdaQueryWrapper));
+    }
+
+    @GetMapping("/getCourse")
+    public Result getCourse(@RequestParam String id) {
+        LambdaQueryWrapper<Question> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Question::getStudentId, id)
+                .groupBy(Question::getCourseId);
+        return Result.suc(questionService.getCourse(lambdaQueryWrapper));
+    }
+
+    @GetMapping("/getReview")
+    public Result getReview(@RequestParam String id) {
+        LambdaQueryWrapper<Question> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Question::getStudentId, id)
+                .groupBy(Question::getReview);
+        return Result.suc(questionService.getReview(lambdaQueryWrapper));
+    }
+
+    @GetMapping("/getNewQue")
+    public Result getNewQue(@RequestParam String id) {
+        return Result.suc(questionService.getNewQue(id));
+    }
+
+    @GetMapping("/getUpdateQue")
+    public Result getUpdateQue(@RequestParam String id) {
+        return Result.suc(questionService.getUpdateQue(id));
     }
 }
 

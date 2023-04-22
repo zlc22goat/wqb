@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wqb.mapper.QuestionMapper">
+    <select id="getMastery" resultMap="MasteryMap">
+        select mastery, count(mastery) as count
+        from question
+        ${ew.customSqlSegment}
+    </select>
+    
+    <resultMap id="MasteryMap" type="com.wqb.vo.MasteryVo">
+        <result property="mastery" column="mastery"></result>
+        <result property="count" column="count"></result>
+    </resultMap>
+
+    <select id="getLevel" resultMap="LevelMap">
+        select level, count(level) as count
+        from question
+        ${ew.customSqlSegment}
+    </select>
+
+    <resultMap id="LevelMap" type="com.wqb.vo.LevelVo">
+        <result property="level" column="level"></result>
+        <result property="count" column="count"></result>
+    </resultMap>
+
+    <select id="getCourse" resultMap="CourseMap">
+        select c.c_name, count(q.course_id) as count
+        from question q
+        left join course c
+        on q.course_id = c.c_id
+        ${ew.customSqlSegment}
+    </select>
+
+    <resultMap id="CourseMap" type="com.wqb.vo.CourseVo">
+        <result property="cName" column="c_name"></result>
+        <result property="count" column="count"></result>
+    </resultMap>
+
+    <select id="getReview" resultMap="ReviewMap">
+        select review, count(review) as count
+        from question
+        ${ew.customSqlSegment}
+    </select>
+
+    <resultMap id="ReviewMap" type="com.wqb.vo.ReviewVo">
+        <result property="review" column="review"></result>
+        <result property="count" column="count"></result>
+    </resultMap>
+
     <select id="selectQuestion" resultMap="QuestionCourseVoMap">
         select q.*, c.c_name
         from Question q
@@ -41,5 +87,85 @@
         <result property="createTime" column="create_time"></result>
         <result property="updateTime" column="update_time"></result>
         <result property="review" column="review"></result>
+    </resultMap>
+
+    <select id="getNewQue" resultMap="NewQueMap">
+        SELECT a.month, IFNULL(b.count,0) AS count
+        FROM (
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 11 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 10 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 9 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 8 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 7 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 6 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 5 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 4 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 3 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 2 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(CURDATE(),'%Y-%m') AS month
+            ) a
+            LEFT JOIN (
+            SELECT DATE_FORMAT(create_time,'%Y-%m')  AS DATETIME, count(*) AS count
+            FROM question
+            WHERE question.student_id = #{id}
+            GROUP BY DATE_FORMAT(create_time,'%Y-%m')
+            ) b ON a.month = b.datetime
+    </select>
+
+    <resultMap id="NewQueMap" type="com.wqb.vo.NewQueVo">
+        <result property="month" column="month"></result>
+        <result property="count" column="count"></result>
+    </resultMap>
+
+    <select id="getUpdateQue" resultMap="UpdateQueMap">
+        SELECT a.month, IFNULL(b.count,0) AS count
+        FROM (
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 11 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 10 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 9 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 8 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 7 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 6 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 5 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 4 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 3 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 2 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(CURDATE(),'%Y-%m') AS month
+            ) a
+            LEFT JOIN (
+            SELECT DATE_FORMAT(update_time,'%Y-%m')  AS DATETIME, count(*) AS count
+            FROM question
+            WHERE question.student_id = #{id}
+            GROUP BY DATE_FORMAT(update_time,'%Y-%m')
+            ) b ON a.month = b.datetime
+    </select>
+
+    <resultMap id="UpdateQueMap" type="com.wqb.vo.UpdateQueVo">
+        <result property="month" column="month"></result>
+        <result property="count" column="count"></result>
     </resultMap>
 </mapper>

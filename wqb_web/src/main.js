@@ -8,7 +8,9 @@ import VueRouter from 'vue-router';
 import htmlToPdf from '@/utils/htmlToPdf'
 import router from "@/router";
 import store from "./store"
+import * as echarts from 'echarts';
 
+Vue.prototype.$echarts = echarts
 Vue.prototype.$httpUrl = 'http://localhost:8092';
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false
