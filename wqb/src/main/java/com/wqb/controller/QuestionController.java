@@ -34,9 +34,6 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @Autowired
-    private MenuService menuService;
-
     @GetMapping("/list")
     public List<Question> list() {
         return questionService.list();
@@ -56,6 +53,7 @@ public class QuestionController {
     @PostMapping("/updateQuestion")
     public Result updateQuestion(@RequestBody Question question) {
         question.setUpdateTime(new Date());
+        question.setReview(0);
         return questionService.updateById(question) ? Result.suc(question) : Result.fail();
     }
 
@@ -79,6 +77,7 @@ public class QuestionController {
         question.setCreateTime(createTime);
         question.setUpdateTime(createTime);
         question.setMastery(0);
+        question.setReview(0);
 
         return questionService.save(question) ? Result.suc() : Result.fail();
     }
@@ -101,6 +100,16 @@ public class QuestionController {
 
         Timestamp createTime = new Timestamp(new Date().getTime());
         question.setUpdateTime(createTime);
+        return questionService.updateById(question) ? Result.suc() : Result.fail();
+    }
+
+    @PostMapping("/updateReview")
+    public Result updateReview(@RequestBody Params param) {
+        Question question = param.getQuestion();
+
+        Timestamp createTime = new Timestamp(new Date().getTime());
+        question.setUpdateTime(createTime);
+        question.setReview(0);
         return questionService.updateById(question) ? Result.suc() : Result.fail();
     }
 
@@ -181,7 +190,9 @@ public class QuestionController {
         if (!"".equals(body)) {
             lambdaQueryWrapper.like(Question::getBody, body);
         }
-        lambdaQueryWrapper.orderByDesc(Question::getUpdateTime).orderByDesc(Question::getCreateTime);
+        lambdaQueryWrapper.orderByDesc(Question::getReview)
+                .orderByDesc(Question::getUpdateTime)
+                .orderByDesc(Question::getCreateTime);
         IPage result = questionService.selectQuestion(questionPage, lambdaQueryWrapper);
 
         return Result.suc(result.getRecords(), result.getTotal());

@@ -189,10 +189,9 @@ export default {
     },
     mod() {
       let dataOb = {
-        question: this.form,
-        list: this.checkList
+        question: this.form
       }
-      this.$axios.post(this.$httpUrl+'/question/update',dataOb).then(res=>res.data).then(res=>{
+      this.$axios.post(this.$httpUrl+'/question/updateReview',dataOb).then(res=>res.data).then(res=>{
         // console.log(res)
         if(res.code==200){
           this.$message({
@@ -224,7 +223,7 @@ export default {
           });
         }
       })
-      this.checkList = []
+      // this.checkList = []
     },
     showHistory() {
       this.isShowHistory = true

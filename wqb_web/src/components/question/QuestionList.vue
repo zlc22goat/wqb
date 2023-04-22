@@ -122,12 +122,12 @@
       </el-table-column>
 
 <!--      表格显示-->
-      <el-table-column label="学科" prop="cName" width="100">
+      <el-table-column label="学科" prop="cName" width="80">
         <template slot-scope="scope">
           {{scope.row.cname}}
         </template>
       </el-table-column>
-      <el-table-column label="题型" prop="type" width="110">
+      <el-table-column label="题型" prop="type" width="105">
         <template slot-scope="scope">
           <el-tag
               :type="scope.row.type === 1 ? 'primary' : 'success'"
@@ -153,8 +153,16 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="创建时间" prop="createTime" width="200"></el-table-column>
-      <el-table-column label="最后更新时间" prop="updateTime" width="200"></el-table-column>
+      <el-table-column label="创建时间" prop="createTime" width="150"></el-table-column>
+      <el-table-column label="最后更新时间" prop="updateTime" width="150"></el-table-column>
+      <el-table-column label="几日没复习" prop="review" width="100">
+        <template slot-scope="scope">
+          <el-tag
+              :type="scope.row.review >= 5 ? 'danger' :
+              (scope.row.review <= 1 ? 'info' : 'warning')"
+              disable-transitions>{{scope.row.review+'日'}}</el-tag>
+        </template>
+      </el-table-column>
 
       <el-table-column prop="operate" label="操作" width="200">
         <template slot-scope="scope">
@@ -202,7 +210,6 @@
       </span>
     </el-dialog>
   </div>
-
 </template>
 
 <script>

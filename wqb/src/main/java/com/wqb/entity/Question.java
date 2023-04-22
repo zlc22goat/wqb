@@ -117,5 +117,7 @@ public class Question implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")//接受从前端传入的日期格式，映射到java类日期属性的规则
     private Date updateTime;
 
+    @ApiModelProperty(value = "多久没复习")
+    private Integer review;
 
 }
