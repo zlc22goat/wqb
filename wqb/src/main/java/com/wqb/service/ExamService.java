@@ -6,6 +6,7 @@ import com.wqb.entity.Question;
 import com.wqb.vo.QuestionCourseVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -21,4 +22,10 @@ public interface ExamService extends IService<Exam> {
     List<Question> selectAllQuestion(String id);
 
     Integer[] selectQuestionId(String id);
+
+    List<Map<Integer, Integer>> getState(String id);
+
+    List<Map<Integer, Integer>> getMark(String id);
+
+    List<Map<Integer, Integer>> getNewExam(String id);
 }

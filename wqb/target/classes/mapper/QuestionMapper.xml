@@ -157,8 +157,10 @@
             SELECT DATE_FORMAT(CURDATE(),'%Y-%m') AS month
             ) a
             LEFT JOIN (
-            SELECT DATE_FORMAT(update_time,'%Y-%m')  AS DATETIME, count(*) AS count
-            FROM question
+            SELECT DATE_FORMAT(answer.create_time,'%Y-%m')  AS DATETIME, count(answer.create_time) AS count
+            FROM answer
+            LEFT JOIN question
+            ON answer.question_id = question.id
             WHERE question.student_id = #{id}
             GROUP BY DATE_FORMAT(update_time,'%Y-%m')
             ) b ON a.month = b.datetime

@@ -143,5 +143,20 @@ public class ExamController {
     public Result selectQuestionId(@RequestParam String id) {
         return Result.suc(examService.selectQuestionId(id));
     }
+
+    @GetMapping("/getState")
+    public Result getState(@RequestParam String id) {
+        return Result.suc(examService.getState(id));
+    }
+
+    @GetMapping("/getMark")
+    public Result getMark(@RequestParam String id) {
+        return Result.suc(examService.getMark(id));
+    }
+
+    @GetMapping("/getNewExam")
+    public Result getNewExam(@RequestParam String id) {
+        return Result.suc(examService.getNewExam(id));
+    }
 }
 

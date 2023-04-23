@@ -66,4 +66,95 @@
         <result property="createTime" column="create_time"></result>
         <result property="updateTime" column="update_time"></result>
     </resultMap>
+
+    <select id="getState" resultMap="StateMap">
+        select state, count(state) as count
+        from exam
+        where student_id = #{id}
+        group by state
+    </select>
+
+    <resultMap id="StateMap" type="com.wqb.vo.NewExamVo">
+        <result property="state" column="state"></result>
+        <result property="stateCount" column="count"></result>
+    </resultMap>
+
+    <select id="getMark" resultMap="MarkMap">
+        select a.count count, a.markRemark as markRemark
+        from (
+            select count(mark) as count, '不及格' as markRemark
+            from exam where mark &lt; 60
+            and student_id = #{id}
+            and state = 1
+            union all
+
+            select count(mark) as count, '及格' as markRemark
+            from exam where mark >= 60 and mark &lt; 70
+            and student_id = #{id}
+            and state = 1
+            union all
+
+            select count(mark) as count, '中' as markRemark
+            from exam where mark >= 70 and mark &lt; 80
+            and student_id = #{id}
+            and state = 1
+            union all
+
+            select count(mark) as count, '良好' as markRemark
+            from exam where mark >= 80 and mark &lt; 90
+            and student_id = #{id}
+            and state = 1
+            union all
+
+            select count(mark) as count, '优秀' as markRemark
+            from exam where mark >= 90
+            and student_id = #{id}
+            and state = 1
+            ) a
+    </select>
+
+    <resultMap id="MarkMap" type="com.wqb.vo.NewExamVo">
+        <result property="markRemark" column="markRemark"></result>
+        <result property="markCount" column="count"></result>
+    </resultMap>
+
+    <select id="getNewExam" resultMap="NewExamMap">
+        SELECT a.month, IFNULL(b.count,0) AS count
+        FROM (
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 11 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 10 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 9 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 8 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 7 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 6 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 5 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 4 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 3 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 2 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(CURDATE(),'%Y-%m') AS month
+            ) a
+            LEFT JOIN (
+            SELECT DATE_FORMAT(create_time,'%Y-%m')  AS DATETIME, count(*) AS count
+            FROM exam
+            WHERE exam.student_id = #{id}
+            GROUP BY DATE_FORMAT(create_time,'%Y-%m')
+            ) b ON a.month = b.datetime
+    </select>
+
+    <resultMap id="NewExamMap" type="com.wqb.vo.NewExamVo">
+        <result property="month" column="month"></result>
+        <result property="monthCount" column="count"></result>
+    </resultMap>
 </mapper>

@@ -130,9 +130,9 @@
         center>
 
       <span style="text-align: center; display:block;
-      font-size: 20px;" v-if="this.exam.mark === ''">很遗憾，都错了，不要灰心，记得时常巩固喔！！！</span><br>
+      font-size: 20px;" v-if="this.exam.mark === 0">很遗憾，都答错了，不要灰心，记得时常巩固喔！！！</span><br>
       <span style="text-align: center; display:block;
-      font-size: 20px;" v-if="this.exam.mark !== ''">你的分数为{{Math.floor(this.exam.mark)}}分</span><br>
+      font-size: 20px;" v-if="this.exam.mark !== 0">你的分数为{{Math.floor(this.exam.mark)}}分</span><br>
       <span style="text-align: center; display:block;" v-if="this.exam.mark === 100">恭喜你，满分！！！</span>
       <span style="text-align: center; display:block;" v-if="this.exam.mark !== 100">填空解答的判分仅供参考，自己再检查检查吧</span>
 
@@ -293,6 +293,7 @@ export default {
     updateExam() {
       // 更新到exam
       this.exam.state = 1
+      if (this.exam.mark === '') this.exam.mark = 0
       this.$axios.post(this.$httpUrl+'/exam/updateExam', this.exam).then(res=>res.data).then(res=>{
         // console.log(this.exam)
         if(res.code==200){

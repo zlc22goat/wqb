@@ -7,6 +7,7 @@ import com.wqb.vo.QuestionCourseVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -23,4 +24,10 @@ public interface ExamMapper extends BaseMapper<Exam> {
     List<Question> selectAllQuestion(String id);
 
     Integer[] selectQuestionId(String id);
+
+    List<Map<Integer, Integer>> getState(String id);
+
+    List<Map<Integer, Integer>> getMark(String id);
+
+    List<Map<Integer, Integer>> getNewExam(String id);
 }

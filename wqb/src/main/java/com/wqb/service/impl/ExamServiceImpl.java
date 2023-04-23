@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -38,5 +39,20 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     @Override
     public Integer[] selectQuestionId(String id) {
         return examMapper.selectQuestionId(id);
+    }
+
+    @Override
+    public List<Map<Integer, Integer>> getState(String id) {
+        return examMapper.getState(id);
+    }
+
+    @Override
+    public List<Map<Integer, Integer>> getMark(String id) {
+        return examMapper.getMark(id);
+    }
+
+    @Override
+    public List<Map<Integer, Integer>> getNewExam(String id) {
+        return examMapper.getNewExam(id);
     }
 }
