@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import * as echarts from 'echarts';
 export default {
   name: "AnalysisQue",
   data() {
@@ -333,22 +334,28 @@ export default {
             {
               data: this.newData,
               type: 'bar',
-              showBackground: true,
-              backgroundStyle: {
-                color: 'rgba(180, 180, 180, 0.2)'
-              },
+              showBackground: false,
               itemStyle: {
                 normal: {
-                  // color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
-                  //   offset: 0,
-                  //   color: "#1268f3" // 0% 处的颜色
-                  // }, {
-                  //   offset: 0.6,
-                  //   color: "#08a4fa" // 60% 处的颜色
-                  // }, {
-                  //   offset: 1,
-                  //   color: "#01ccfe" // 100% 处的颜色
-                  // }], false),
+                  color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+                    offset: 0,
+                    color: "#f31212" // 0% 处的颜色
+                  }, {
+                    offset: 0.2,
+                    color: "#fa9108" // 60% 处的颜色
+                  }, {
+                    offset: 0.4,
+                    color: "#5efe01" // 100% 处的颜色
+                  }, {
+                    offset: 0.6,
+                    color: "#08fab1" // 60% 处的颜色
+                  }, {
+                    offset: 0.8,
+                    color: "#0879fa" // 60% 处的颜色
+                  }, {
+                    offset: 1,
+                    color: "#7d08fa" // 60% 处的颜色
+                  }], false),
                   label: {
                     show: true,     //开启显示
                     position: 'top',    //在上方显示
@@ -376,6 +383,11 @@ export default {
 
         // 指定图表的配置项和数据
         var option = {
+          title: {
+            show: true,
+            text: '最近一年复习的错题次数',
+            left: 'center'
+          },
           xAxis: {
             type: 'category',
             data: this.lastMonth
@@ -387,10 +399,38 @@ export default {
             {
               data: this.updateData,
               type: 'bar',
-              showBackground: true,
-              backgroundStyle: {
-                color: 'rgba(180, 180, 180, 0.2)'
-              }
+              showBackground: false,
+              itemStyle: {
+                normal: {
+                  color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+                    offset: 0,
+                    color: "#f31212" // 0% 处的颜色
+                  }, {
+                    offset: 0.2,
+                    color: "#fa9108" // 60% 处的颜色
+                  }, {
+                    offset: 0.4,
+                    color: "#5efe01" // 100% 处的颜色
+                  }, {
+                    offset: 0.6,
+                    color: "#08fab1" // 60% 处的颜色
+                  }, {
+                    offset: 0.8,
+                    color: "#0879fa" // 60% 处的颜色
+                  }, {
+                    offset: 1,
+                    color: "#7d08fa" // 60% 处的颜色
+                  }], false),
+                  label: {
+                    show: true,     //开启显示
+                    position: 'top',    //在上方显示
+                    textStyle: {        //数值样式
+                      color: 'black',
+                      fontSize: 16
+                    }
+                  }
+                }
+              },
             }
           ]
         };
