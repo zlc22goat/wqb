@@ -49,7 +49,7 @@ export default {
       this.$axios.get(this.$httpUrl + "/menu/getAllMenu?roleId=" + this.student.roleid).then(res=>res.data).then(res=>{
         if (res.code != 200) return this.$message.error("获取失败")
         this.menuData = res.data
-        console.log(this.menuData)
+        // console.log(this.menuData)
       })
     }
   },
