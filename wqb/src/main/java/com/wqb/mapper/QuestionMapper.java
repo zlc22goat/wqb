@@ -26,13 +26,13 @@ public interface QuestionMapper extends BaseMapper<Question> {
 
 //    IPage selectAll(IPage<Question> page);
 
-    List<Map<Integer, Integer>> getMastery(@Param(Constants.WRAPPER) Wrapper<MasteryVo> ew);
+    List<Map<Integer, Integer>> getMastery(String id);
 
-    List<Map<Integer, Integer>> getLevel(@Param(Constants.WRAPPER) Wrapper<LevelVo> ew);
+    List<Map<Integer, Integer>> getLevel(String id);
 
-    List<Map<Integer, Integer>> getCourse(@Param(Constants.WRAPPER) Wrapper<CourseVo> ew);
+    List<Map<Integer, Integer>> getCourse(String id);
 
-    List<Map<Integer, Integer>> getReview(@Param(Constants.WRAPPER) Wrapper<ReviewVo> ew);
+    List<Map<Integer, Integer>> getReview(String id);
 
     List<Map<Integer, Integer>> getNewQue(String id);
 

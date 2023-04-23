@@ -31,23 +31,23 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
     @Override
-    public List getMastery(Wrapper wrapper) {
-        return questionMapper.getMastery(wrapper);
+    public List<Map<Integer, Integer>> getMastery(String id) {
+        return questionMapper.getMastery(id);
     }
 
     @Override
-    public List getLevel(Wrapper wrapper) {
-        return questionMapper.getLevel(wrapper);
+    public List<Map<Integer, Integer>> getLevel(String id) {
+        return questionMapper.getLevel(id);
     }
 
     @Override
-    public List getCourse(Wrapper wrapper) {
-        return questionMapper.getCourse(wrapper);
+    public List<Map<Integer, Integer>> getCourse(String id) {
+        return questionMapper.getCourse(id);
     }
 
     @Override
-    public List getReview(Wrapper wrapper) {
-        return questionMapper.getReview(wrapper);
+    public List<Map<Integer, Integer>> getReview(String id) {
+        return questionMapper.getReview(id);
     }
 
     @Override

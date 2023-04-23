@@ -7,8 +7,10 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wqb.common.Result;
 import com.wqb.common.QueryPageParam;
+import com.wqb.entity.Exam;
 import com.wqb.entity.Menu;
 import com.wqb.entity.Student;
+import com.wqb.service.ExamService;
 import com.wqb.service.MenuService;
 import com.wqb.service.StudentService;
 import com.wqb.vo.StudentGradeVo;
@@ -35,6 +37,9 @@ import java.util.List;
 public class StudentController {
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private ExamService examService;
 
     @Autowired
     private MenuService menuService;
@@ -257,6 +262,21 @@ public class StudentController {
         System.out.println("total = " + result.getTotal());
 
         return Result.suc(result.getRecords(), result.getTotal());
+    }
+
+    @GetMapping("/getGradeName")
+    public Result getGradeName() {
+        return Result.suc(studentService.getGradeName());
+    }
+
+    @GetMapping("/getAllMark")
+    public Result getAllMark() {
+        return Result.suc(examService.getAllMark());
+    }
+
+    @GetMapping("/getNewStu")
+    public Result getNewStu() {
+        return Result.suc(studentService.getNewStu());
     }
 }
 

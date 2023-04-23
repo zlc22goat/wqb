@@ -42,4 +42,58 @@
         ${ew.customSqlSegment}
     </select>
 
+    <select id="getGradeName" resultMap="GradeNameMap">
+        select grade_name, count(grade_name) as count
+        from student s
+        left join grade g
+        on s.gradeId = g.grade_id
+        where s.roleId = 1
+        group by grade_name
+        order by s.gradeId
+    </select>
+
+    <resultMap id="GradeNameMap" type="com.wqb.vo.StudentDataVo">
+        <result property="gradeName" column="grade_name"></result>
+        <result property="gradeCount" column="count"></result>
+    </resultMap>
+
+    <select id="getNewStu" resultMap="NewStuMap">
+        SELECT a.month, IFNULL(b.count,0) AS count
+        FROM (
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 11 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 10 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 9 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 8 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 7 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 6 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 5 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 4 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 3 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 2 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m') AS month
+            UNION ALL
+            SELECT DATE_FORMAT(CURDATE(),'%Y-%m') AS month
+            ) a
+            LEFT JOIN (
+            SELECT DATE_FORMAT(create_time,'%Y-%m')  AS DATETIME, count(*) AS count
+            FROM student
+            GROUP BY DATE_FORMAT(create_time,'%Y-%m')
+            ) b ON a.month = b.datetime
+    </select>
+
+    <resultMap id="NewStuMap" type="com.wqb.vo.StudentDataVo">
+        <result property="month" column="month"></result>
+        <result property="monthCount" column="count"></result>
+    </resultMap>
+
 </mapper>

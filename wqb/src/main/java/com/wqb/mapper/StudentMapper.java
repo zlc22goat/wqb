@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -28,4 +29,8 @@ public interface StudentMapper extends BaseMapper<Student> {
     List<StudentGradeVo> selectLogin(@Param(Constants.WRAPPER) Wrapper ew);
 
     IPage selectAll(IPage<Student> page);
+
+    List<Map<String, Integer>> getGradeName();
+
+    List<Map<String, Integer>> getNewStu();
 }

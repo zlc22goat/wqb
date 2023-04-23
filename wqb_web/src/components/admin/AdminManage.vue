@@ -16,14 +16,10 @@
             <el-button type="success" style="margin-left: 5px;" @click="add">新增</el-button>
         </div>
       <el-table :data="tableData" :header-cell-style = "{ background: '#f3f6fd', color: '#555'}" border>
-        <el-table-column prop="sid" label="ID" width="40">
-        </el-table-column>
         <el-table-column prop="sno" label="账号" width="100">
         </el-table-column>
         <el-table-column prop="sname" label="姓名" width="120">
         </el-table-column>
-<!--        <el-table-column prop="age" label="年龄" width="60">-->
-<!--        </el-table-column>-->
         <el-table-column prop="gender" label="性别" width="60">
           <template slot-scope="scope">
             <el-tag
@@ -34,8 +30,14 @@
         <el-table-column prop="major" label="专业" width="60"></el-table-column>
         <el-table-column prop="gradeName" label="年级" width="180"></el-table-column>
         <el-table-column prop="phone" label="电话" width="200"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" width="240"></el-table-column>
-        <el-table-column prop="operate" label="操作">
+        <el-table-column prop="createTime" label="创建时间" width="200"></el-table-column>
+        <el-table-column prop="analysis" label="学情分析">
+          <template slot-scope="scope">
+            <el-button size="small" type="warning" @click="analysisQuestion(scope.row)">错题分析</el-button>
+            <el-button size="small" type="warning" @click="analysisExam(scope.row)">试卷分析</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column prop="operate" label="操作" width="150">
           <template slot-scope="scope">
             <el-button size="small" type="success" @click="mod(scope.row)">编辑</el-button>
             <el-popconfirm
@@ -348,6 +350,12 @@
               console.log(res)
               this.categoryOptions = res.data;
             })
+          },
+          analysisQuestion(row) {
+            this.$router.push({path: "/AnalysisQue", query: {pushData: row}})
+          },
+          analysisExam(row) {
+            this.$router.push({path: "/AnalysisExam", query: {pushData: row}})
           },
         },
         beforeMount() {

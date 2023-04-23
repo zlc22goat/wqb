@@ -198,34 +198,22 @@ public class QuestionController {
 
     @GetMapping("/getMastery")
     public Result getMastery(@RequestParam String id) {
-        LambdaQueryWrapper<Question> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(Question::getStudentId, id)
-                .groupBy(Question::getMastery);
-        return Result.suc(questionService.getMastery(lambdaQueryWrapper));
+        return Result.suc(questionService.getMastery(id));
     }
 
     @GetMapping("/getLevel")
     public Result getLevel(@RequestParam String id) {
-        LambdaQueryWrapper<Question> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(Question::getStudentId, id)
-                .groupBy(Question::getLevel);
-        return Result.suc(questionService.getLevel(lambdaQueryWrapper));
+        return Result.suc(questionService.getLevel(id));
     }
 
     @GetMapping("/getCourse")
     public Result getCourse(@RequestParam String id) {
-        LambdaQueryWrapper<Question> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(Question::getStudentId, id)
-                .groupBy(Question::getCourseId);
-        return Result.suc(questionService.getCourse(lambdaQueryWrapper));
+        return Result.suc(questionService.getCourse(id));
     }
 
     @GetMapping("/getReview")
     public Result getReview(@RequestParam String id) {
-        LambdaQueryWrapper<Question> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(Question::getStudentId, id)
-                .groupBy(Question::getReview);
-        return Result.suc(questionService.getReview(lambdaQueryWrapper));
+        return Result.suc(questionService.getReview(id));
     }
 
     @GetMapping("/getNewQue")

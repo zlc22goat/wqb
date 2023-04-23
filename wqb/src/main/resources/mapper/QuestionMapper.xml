@@ -4,7 +4,9 @@
     <select id="getMastery" resultMap="MasteryMap">
         select mastery, count(mastery) as count
         from question
-        ${ew.customSqlSegment}
+        where student_id = #{id}
+        group by mastery
+        order by mastery
     </select>
     
     <resultMap id="MasteryMap" type="com.wqb.vo.MasteryVo">
@@ -15,7 +17,9 @@
     <select id="getLevel" resultMap="LevelMap">
         select level, count(level) as count
         from question
-        ${ew.customSqlSegment}
+        where student_id = #{id}
+        group by level
+        order by level
     </select>
 
     <resultMap id="LevelMap" type="com.wqb.vo.LevelVo">
@@ -28,7 +32,9 @@
         from question q
         left join course c
         on q.course_id = c.c_id
-        ${ew.customSqlSegment}
+        where q.student_id = #{id}
+        group by q.course_id
+        order by q.course_id
     </select>
 
     <resultMap id="CourseMap" type="com.wqb.vo.CourseVo">
@@ -39,7 +45,9 @@
     <select id="getReview" resultMap="ReviewMap">
         select review, count(review) as count
         from question
-        ${ew.customSqlSegment}
+        where student_id = #{id}
+        group by review
+        order by review
     </select>
 
     <resultMap id="ReviewMap" type="com.wqb.vo.ReviewVo">

@@ -55,4 +55,9 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     public List<Map<Integer, Integer>> getNewExam(String id) {
         return examMapper.getNewExam(id);
     }
+
+    @Override
+    public List<Map<String, Integer>> getAllMark() {
+        return examMapper.getAllMark();
+    }
 }

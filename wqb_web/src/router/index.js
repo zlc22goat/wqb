@@ -50,6 +50,15 @@ const routes = [
                 name:'StartTest',
                 component:()=>import('../components/exam/StartTest')
             },
+            {
+                path:'/AnalysisQue',
+                name:'AnalysisQue',
+                component:()=>import('../components/analysis/AnalysisQue')
+            },{
+                path:'/AnalysisExam',
+                name:'AnalysisExam',
+                component:()=>import('../components/analysis/AnalysisExam')
+            },
             // {
             //     path:'/Admin',
             //     name:'admin',

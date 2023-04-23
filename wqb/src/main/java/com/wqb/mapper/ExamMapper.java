@@ -30,4 +30,6 @@ public interface ExamMapper extends BaseMapper<Exam> {
     List<Map<Integer, Integer>> getMark(String id);
 
     List<Map<Integer, Integer>> getNewExam(String id);
+
+    List<Map<String, Integer>> getAllMark();
 }

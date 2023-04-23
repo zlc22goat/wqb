@@ -113,6 +113,35 @@
             ) a
     </select>
 
+    <select id="getAllMark" resultMap="MarkMap">
+        select a.count count, a.markRemark as markRemark
+        from (
+            select count(mark) as count, '不及格' as markRemark
+            from exam where mark &lt; 60
+            and state = 1
+            union all
+
+            select count(mark) as count, '及格' as markRemark
+            from exam where mark >= 60 and mark &lt; 70
+            and state = 1
+            union all
+
+            select count(mark) as count, '中' as markRemark
+            from exam where mark >= 70 and mark &lt; 80
+            and state = 1
+            union all
+
+            select count(mark) as count, '良好' as markRemark
+            from exam where mark >= 80 and mark &lt; 90
+            and state = 1
+            union all
+
+            select count(mark) as count, '优秀' as markRemark
+            from exam where mark >= 90
+            and state = 1
+            ) a
+    </select>
+
     <resultMap id="MarkMap" type="com.wqb.vo.NewExamVo">
         <result property="markRemark" column="markRemark"></result>
         <result property="markCount" column="count"></result>

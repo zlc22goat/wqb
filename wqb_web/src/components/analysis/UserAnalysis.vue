@@ -1,15 +1,15 @@
 <template>
   <div>
     <div style = "width: 49%;  float: left; border: dashed 1px; margin-top: 10px">
-      <div id="state" style="width: 100%;height:600px; margin-top: 5px"></div>
+      <div id="grade" style="width: 100%;height:600px; margin-top: 5px"></div>
     </div>
 
     <div style = "width: 49%;  float: right; border: dashed 1px; margin-top: 10px">
-      <div id="mark" style="width: 100%;height:600px; margin-top: 5px"></div>
+      <div id="allMark" style="width: 100%;height:600px; margin-top: 5px"></div>
     </div>
 
     <div style = "width: 100%; float: left; border: dashed 1px; margin-top: 10px">
-      <div id="newExam" style="width: 100%;height:600px; margin-top: 5px"></div>
+      <div id="newStu" style="width: 100%;height:600px; margin-top: 5px"></div>
     </div>
   </div>
 </template>
@@ -17,43 +17,29 @@
 <script>
 import * as echarts from 'echarts';
 export default {
-  name: "AnalysisExam",
+  name: "UserAnalysis",
   data() {
     return {
-      hasData: this.$route.query.pushData,
-      student: '',
-      studentId: '',
-      stateData: [],
+      gradeData: [],
       markData: [],
       lastMonth: [],
-      newExamData: [],
+      newStuData: [],
     }
   },
   methods: {
-    init() {
-      if (typeof this.hasData != "undefined") {
-        console.log(this.hasData)
-        this.studentId = this.hasData.sid
-      } else {
-        this.student = JSON.parse(sessionStorage.getItem('CurUser'))
-        this.studentId = this.student.sid
-      }
-    },
-    getStateChart() {
-      this.$axios.get(this.$httpUrl+'/exam/getState?id='+this.studentId).then(res=>res.data).then(res=>{
+    getGradeChart() {
+      this.$axios.get(this.$httpUrl+'/student/getGradeName').then(res=>res.data).then(res=>{
         for (let i = 0; i < res.data.length; i++) {
-          this.stateData[i] = {
+          console.log(res.data)
+          this.gradeData[i] = {
             value: '',
             name: ''
           }
-          this.stateData[i].value = res.data[i].stateCount
-          switch (res.data[i].state) {
-            case 0: this.stateData[i].name = "未完成"; break;
-            case 1: this.stateData[i].name = "已完成"; break;
-          }
+          this.gradeData[i].value = res.data[i].gradeCount
+          this.gradeData[i].name = res.data[i].gradeName
         }
         // console.log(this.data)
-        var myChart = this.$echarts.init(document.getElementById('state'));
+        var myChart = this.$echarts.init(document.getElementById('grade'));
 
         // 指定图表的配置项和数据
         var option = {
@@ -66,7 +52,7 @@ export default {
           },
           title: {
             // 设置饼图标题，位置设为顶部居中
-            text: "组卷完成情况",
+            text: "学生所在年级",
             left: "center"
           },
           series: [
@@ -94,7 +80,7 @@ export default {
               labelLine: {
                 show: true
               },
-              data: this.stateData
+              data: this.gradeData
             }
           ]
         };
@@ -103,8 +89,8 @@ export default {
         myChart.setOption(option);
       })
     },
-    getMarkChart() {
-      this.$axios.get(this.$httpUrl+'/exam/getMark?id='+this.studentId).then(res=>res.data).then(res=>{
+    getAllMarkChart() {
+      this.$axios.get(this.$httpUrl+'/student/getAllMark').then(res=>res.data).then(res=>{
         for (let i = 0; i < res.data.length; i++) {
           this.markData[i] = {
             value: '',
@@ -114,7 +100,7 @@ export default {
           this.markData[i].name = res.data[i].markRemark
         }
 
-        var myChart = this.$echarts.init(document.getElementById('mark'));
+        var myChart = this.$echarts.init(document.getElementById('allMark'));
 
         // 指定图表的配置项和数据
         var option = {
@@ -164,19 +150,19 @@ export default {
         myChart.setOption(option);
       })
     },
-    getNewExamChart() {
-      this.$axios.get(this.$httpUrl+'/exam/getNewExam?id='+this.studentId).then(res=>res.data).then(res=>{
+    getNewStuChart() {
+      this.$axios.get(this.$httpUrl+'/student/getNewStu').then(res=>res.data).then(res=>{
         for (let i = 0; i < res.data.length; i++) {
           this.lastMonth[i] = res.data[i].month
-          this.newExamData[i] = res.data[i].monthCount
+          this.newStuData[i] = res.data[i].monthCount
         }
-        var myChart = this.$echarts.init(document.getElementById('newExam'));
+        var myChart = this.$echarts.init(document.getElementById('newStu'));
 
         // 指定图表的配置项和数据
         var option = {
           title: {
             show: true,
-            text: '最近一年组卷数量',
+            text: '最近一年注册的学生数',
             left: 'center'
           },
           xAxis: {
@@ -188,7 +174,7 @@ export default {
           },
           series: [
             {
-              data: this.newExamData,
+              data: this.newStuData,
               type: 'bar',
               showBackground: false,
               itemStyle: {
@@ -231,10 +217,9 @@ export default {
     },
   },
   mounted() {
-    this.init();
-    this.getStateChart();
-    this.getMarkChart();
-    this.getNewExamChart();
+    this.getAllMarkChart();
+    this.getNewStuChart();
+    this.getGradeChart()
   }
 }
 </script>

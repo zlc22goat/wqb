@@ -9,6 +9,7 @@ import com.wqb.vo.StudentGradeVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -28,4 +29,8 @@ public interface StudentService extends IService<Student> {
     List<StudentGradeVo> selectLogin(Wrapper wrapper);
 
     IPage selectAll(IPage<Student> studentPage);
+
+    List<Map<String, Integer>> getGradeName();
+
+    List<Map<String, Integer>> getNewStu();
 }

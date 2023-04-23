@@ -32,6 +32,7 @@ export default {
   name: "AnalysisQue",
   data() {
     return {
+      hasData: this.$route.query.pushData,
       student: '',
       studentId: '',
       masteryData: [],
@@ -45,8 +46,13 @@ export default {
   },
   methods: {
     init() {
-      this.student = JSON.parse(sessionStorage.getItem('CurUser'))
-      this.studentId = this.student.sid
+      if (typeof this.hasData != "undefined") {
+        console.log(this.hasData)
+        this.studentId = this.hasData.sid
+      } else {
+        this.student = JSON.parse(sessionStorage.getItem('CurUser'))
+        this.studentId = this.student.sid
+      }
     },
     getMasteryChart() {
       this.$axios.get(this.$httpUrl+'/question/getMastery?id='+this.studentId).then(res=>res.data).then(res=>{

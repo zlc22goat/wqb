@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -44,5 +45,15 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     @Override
     public List<StudentGradeVo> selectLogin(Wrapper wrapper) {
         return studentMapper.selectLogin(wrapper);
+    }
+
+    @Override
+    public List<Map<String, Integer>> getGradeName() {
+        return studentMapper.getGradeName();
+    }
+
+    @Override
+    public List<Map<String, Integer>> getNewStu() {
+        return studentMapper.getNewStu();
     }
 }

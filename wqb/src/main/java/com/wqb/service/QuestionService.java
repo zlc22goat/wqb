@@ -24,13 +24,13 @@ public interface QuestionService extends IService<Question> {
 
 //    IPage selectAll(IPage<Question> page);
 
-    List<Map<Integer, Integer>> getMastery(Wrapper wrapper);
+    List<Map<Integer, Integer>> getMastery(String id);
 
-    List<Map<Integer, Integer>> getLevel(Wrapper wrapper);
+    List<Map<Integer, Integer>> getLevel(String id);
 
-    List<Map<Integer, Integer>> getCourse(Wrapper wrapper);
+    List<Map<Integer, Integer>> getCourse(String id);
 
-    List<Map<Integer, Integer>> getReview(Wrapper wrapper);
+    List<Map<Integer, Integer>> getReview(String id);
 
     List<Map<Integer, Integer>> getNewQue(String id);
 
