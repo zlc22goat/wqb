@@ -76,6 +76,16 @@ public class StudentController {
         return studentService.save(student) ? Result.suc() : Result.fail();
     }
 
+    @PostMapping("/saveTea")
+    public Result saveTea(@RequestBody Student student) {
+        Timestamp createTime = new Timestamp(new Date().getTime());
+
+        student.setCreateTime(createTime);
+        student.setRoleid(2);
+
+        return studentService.save(student) ? Result.suc() : Result.fail();
+    }
+
     @PostMapping("/update")
     public Result update(@RequestBody Student student) {
         return studentService.updateById(student) ? Result.suc() : Result.fail();
@@ -83,12 +93,12 @@ public class StudentController {
 
     @PostMapping("/register")
     public Result register(@RequestBody Student person){
-        String studentname = person.getSName();
+        String studentNo = person.getSNo();
         String password = person.getSPassword();
 
         //1.判断用户名、密码是否为空
-        if(studentname != null && password != null){
-            Student student =  studentService.queryByUsername(studentname);
+        if(studentNo != null && password != null){
+            Student student =  studentService.queryByUsername(studentNo);
             //2.判断是否有重复用户名
             if(student!=null){
                 return Result.fail();
@@ -217,21 +227,21 @@ public class StudentController {
         HashMap param = query.getParam();
         String name = (String)param.get("sname");
         String gender = (String) param.get("gender");
-        System.out.println(gender);
+        Integer role = (Integer) param.get("roleid");
 
         Page<Student> studentPage = new Page<>();
         studentPage.setCurrent(query.getPageNum());
         studentPage.setSize(query.getPageSize());
 
         LambdaQueryWrapper<Student> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        if (gender.equals("")) {
-            lambdaQueryWrapper.eq(Student::getRoleid, 1)
-                    .like(Student::getSName, name);// 用name做模糊查询
-        } else {
-            lambdaQueryWrapper.eq(Student::getRoleid, 1)
-                    .eq(Student::getGender, gender).like(Student::getSName, name);// 用name做模糊查询
+        lambdaQueryWrapper.eq(Student::getRoleid, role).like(Student::getSName, name);
+        if (!gender.equals("")) {
+            lambdaQueryWrapper.eq(Student::getGender, gender);
         }
-
+        if (param.get("squadId") != "") {
+            Integer squadId = (Integer) param.get("squadId");
+            lambdaQueryWrapper.eq(Student::getSquadId, squadId);
+        }
 
         IPage result = studentService.selectStudentGrade(studentPage, lambdaQueryWrapper);
 

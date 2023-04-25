@@ -27,6 +27,16 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="班级" prop="name">
+          <el-select v-model="ruleForm.squadId" filterable placeholder="请选择班级" style="margin-left: 5px;">
+            <el-option
+                v-for="item in squadCategoryOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="手机号码" prop="phone">
           <el-input v-model="ruleForm.phone" clearable></el-input>
         </el-form-item>
@@ -73,6 +83,7 @@ export default {
     }
     return {
       categoryOptions: this.$route.query.index,
+      squadCategoryOptions: [],
       total: 0,
       sno: '',
       sname: '',
@@ -96,7 +107,8 @@ export default {
         gradeName: '',
         phone: '',
         spassword: '',
-        checkPass: ''
+        checkPass: '',
+        squadId: '',
       },
       rules: {
         sno: [
@@ -123,17 +135,11 @@ export default {
     }
   },
   methods: {
-    // test() {
-    //   this.categoryOptions = this.$route.query.index
-    //   console.log(this.categoryOptions)
-    // },
-    getOneCategory() {
-      this.$axios.get(this.$httpUrl+'/grade/list').then(res=>res.data).then(res=>{
-        console.log(res)
-        this.categoryOptions = res.data;
+    getSquadCategory() {
+      this.$axios.get(this.$httpUrl+'/squad/list').then(res=>res.data).then(res=>{
+        this.squadCategoryOptions = res.data;
       })
     },
-
     returnForm() {
       // 返回login界面
       this.$router.push('/login')
@@ -141,25 +147,26 @@ export default {
 
     submitForm(){
       this.$axios.post(this.$httpUrl+'/student/register', this.ruleForm).then(res=>res.data).then(res=>{
-        console.log(res)
+        console.log(this.ruleForm)
         if(res.code==200){
           this.$message({
-            message: '操作成功！',
+            message: '注册成功！',
             type: 'success'
           });
           this.$refs.ruleForm.resetFields();
           this.returnForm()
-          alert('注册成功！')
-        }else{
+        }else {
           this.$message({
-            message: '操作失败！',
+            message: '出问题啦！！！',
             type: 'error'
           });
-          alert('出问题啦！！！')
         }
 
       })
     },
+  },
+  created() {
+    this.getSquadCategory()
   }
 }
 </script>

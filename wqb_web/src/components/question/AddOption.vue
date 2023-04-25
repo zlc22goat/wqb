@@ -268,7 +268,7 @@
         <el-form-item label="" prop="level">
           <el-col :span="20">
             <div class="block">
-              <el-rate v-model="form.level"></el-rate>
+              <el-rate v-model="form.level" disabled></el-rate>
             </div>
           </el-col>
         </el-form-item>
@@ -354,25 +354,27 @@ export default {
     init(){
       this.student = JSON.parse(sessionStorage.getItem('CurUser'))
       if (typeof this.hasData != "undefined") {
-        this.form.id = this.hasData.id
-        this.form.body = this.hasData.body
-        this.form.bodyPic = this.hasData.bodyPic
-        this.form.optiona = this.hasData.optiona
-        this.form.optionaPic = this.hasData.optionaPic
-        this.form.optionb = this.hasData.optionb
-        this.form.optionbPic = this.hasData.optionbPic
-        this.form.optionc = this.hasData.optionc
-        this.form.optioncPic = this.hasData.optioncPic
-        this.form.optiond = this.hasData.optiond
-        this.form.optiondPic = this.hasData.optiondPic
-
-        this.form.answerOption = this.hasData.answerOption
-        this.form.detail = this.hasData.detail
-        this.form.detailPic = this.hasData.detailPic
-        this.form.level = this.hasData.level
-        this.form.courseId = this.hasData.courseId
-        this.form.cname = this.hasData.cname
-        this.form.remark = this.hasData.remark
+        // this.form.id = this.hasData.id
+        // this.form.body = this.hasData.body
+        // this.form.bodyPic = this.hasData.bodyPic
+        // this.form.optiona = this.hasData.optiona
+        // this.form.optionaPic = this.hasData.optionaPic
+        // this.form.optionb = this.hasData.optionb
+        // this.form.optionbPic = this.hasData.optionbPic
+        // this.form.optionc = this.hasData.optionc
+        // this.form.optioncPic = this.hasData.optioncPic
+        // this.form.optiond = this.hasData.optiond
+        // this.form.optiondPic = this.hasData.optiondPic
+        //
+        // this.form.answerOption = this.hasData.answerOption
+        // this.form.detail = this.hasData.detail
+        // this.form.detailPic = this.hasData.detailPic
+        // this.form.level = this.hasData.level
+        // this.form.courseId = this.hasData.courseId
+        // this.form.cname = this.hasData.cname
+        // this.form.courseId = this.hasData.courseId
+        // this.form.remark = this.hasData.remark
+        this.form = this.hasData
 
         this.$axios.post(this.$httpUrl+'/question/getCheck', this.form).then(res=>res.data).then(res=>{
           this.checkList = res.data;

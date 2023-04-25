@@ -65,5 +65,5 @@ public class Student implements Serializable {
     @TableField("roleId")
     private Integer roleid;
 
-
+    private Integer squadId;
 }

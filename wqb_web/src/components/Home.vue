@@ -9,12 +9,19 @@
                 </template>
                 {{student.sno}}
             </el-descriptions-item>
-            <el-descriptions-item>
+          <el-descriptions-item v-if="student.roleid === 0">
+            <template slot="label">
+              <i class="el-icon-phone"></i>
+              电话
+            </template>
+            {{student.phone}}
+          </el-descriptions-item>
+            <el-descriptions-item v-if="student.roleid !== 0">
                 <template slot="label">
-                    <i class="el-icon-mobile-phone"></i>
-                    电话
+                    <i class="el-icon-coordinate"></i>
+                    班级
                 </template>
-                {{student.phone}}
+                {{student.name}}
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
@@ -32,7 +39,7 @@
                 </template>
                 <el-tag
                         type="success"
-                        disable-transitions>{{student.roleid===0?"管理员":"学生"}}</el-tag>
+                        disable-transitions>{{student.roleid===0?"管理员":(student.roleid===1?"学生":"班主任")}}</el-tag>
 
             </el-descriptions-item>
 

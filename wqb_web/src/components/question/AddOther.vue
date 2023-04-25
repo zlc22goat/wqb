@@ -204,16 +204,17 @@ export default {
     init(){
       this.student = JSON.parse(sessionStorage.getItem('CurUser'))
       if (typeof this.hasData != "undefined") {
-        this.form.id = this.hasData.id
-        this.form.body = this.hasData.body
-        this.form.bodyPic = this.hasData.bodyPic
-        this.form.answer = this.hasData.answer
-        this.form.answerPic = this.hasData.answerPic
-        this.form.detail = this.hasData.detail
-        this.form.detailPic = this.hasData.detailPic
-        this.form.level = this.hasData.level
-        this.form.courseId = this.hasData.cname
-        this.form.remark = this.hasData.remark
+        // this.form.id = this.hasData.id
+        // this.form.body = this.hasData.body
+        // this.form.bodyPic = this.hasData.bodyPic
+        // this.form.answer = this.hasData.answer
+        // this.form.answerPic = this.hasData.answerPic
+        // this.form.detail = this.hasData.detail
+        // this.form.detailPic = this.hasData.detailPic
+        // this.form.level = this.hasData.level
+        // this.form.courseId = this.hasData.cname
+        // this.form.remark = this.hasData.remark
+        this.form = this.hasData
       }
     },
     getOneCategory() {

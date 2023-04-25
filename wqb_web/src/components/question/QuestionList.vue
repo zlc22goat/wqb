@@ -3,7 +3,7 @@
 <!--    查询-->
     <div style="margin-bottom: 5px;">
       <el-button type="success" style="margin-right: 5px;" @click="initName" size="small">组卷</el-button>
-      <el-input v-model="body" placeholder="请输入题干" suffix-icon="el-icon-search" style="width: 200px;"
+      <el-input v-model="body" placeholder="请输入题干" suffix-icon="el-icon-search" style="width: 180px;"
                 @keyup.enter.native="loadPost"></el-input>
       <el-select v-model="mastery" filterable placeholder="请选择掌握程度" style="margin-left: 5px;">
         <el-option

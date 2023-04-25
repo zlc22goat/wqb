@@ -70,6 +70,7 @@ public class QuestionCourseVo {
     private Integer level;
 
     private String cName;
+    private Integer courseId;
 
     private Integer type;
 

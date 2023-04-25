@@ -13,7 +13,8 @@ export default {
   // props: ['lists'], // 父组件传入数据， 数组形式 [ "连雨不知春去","一晴方觉夏深"]
   data () {
     return {
-      message: [] // 数组文字转化后的字符串
+      student: '',
+      message: '' // 数组文字转化后的字符串
     }
   },
   methods: {
@@ -33,7 +34,8 @@ export default {
       }, 20)
     },
     getRecentMessage() {
-      this.$axios.get(this.$httpUrl+'/message/selectRecent').then(res=>res.data).then(res=>{
+      this.student = JSON.parse(sessionStorage.getItem('CurUser'))
+      this.$axios.get(this.$httpUrl+'/message/selectRecent?squadId=' + this.student.squadId).then(res=>res.data).then(res=>{
         this.message = res.data;
       })
     },
@@ -48,7 +50,7 @@ export default {
   updated: function () {
     this.move()
   },
-  created(){
+  beforeMount(){
     this.getRecentMessage()
   }
 }

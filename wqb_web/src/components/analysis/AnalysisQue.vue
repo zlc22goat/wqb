@@ -257,10 +257,10 @@ export default {
           this.reviewData[i].value = res.data[i].count
           if (res.data[i].review >= 10) {
             this.reviewData[i].name = "亟待复习"
-          } else if (res.data[i].review <= 2) {
-            this.reviewData[i].name = "近期已复习"
-          } else {
+          } else if (res.data[i].review >= 2) {
             this.reviewData[i].name = "有段时间没看了"
+          } else {
+            this.reviewData[i].name = "近期已复习"
           }
         }
         // console.log(this.data)

@@ -87,6 +87,7 @@
         <result property="detailPic" column="detail_pic"></result>
         <result property="level" column="level"></result>
         <result property="cName" column="c_name"></result>
+        <result property="courseId" column="course_id"></result>
         <result property="type" column="type"></result>
         <result property="studentId" column="student_id"></result>
         <result property="remark" column="remark"></result>

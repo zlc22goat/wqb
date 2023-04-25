@@ -3,22 +3,26 @@
 <mapper namespace="com.wqb.mapper.StudentMapper">
 
     <select id="queryByUsername" resultType="com.wqb.entity.Student">
-        select * from Student where s_name = #{sname}
+        select * from Student where s_no = #{sno}
     </select>
 
     <select id="selectStudentGrade" resultMap="StudentGradeVoMap">
-        select s.*, g.grade_name
+        select s.*, g.grade_name, sq.name
         from Student s
         left join grade g
         on s.gradeId = g.grade_id
+        left join squad sq
+        on s.squad_id = sq.id
         ${ew.customSqlSegment}
     </select>
 
     <select id="selectAll" resultMap="StudentGradeVoMap">
-        select s.*, g.grade_name
+        select s.*, g.grade_name, sq.name
         from Student s
         left join grade g
         on s.gradeId = g.grade_id
+        left join squad sq
+        on s.squad_id = sq.id
     </select>
     
     <resultMap id="StudentGradeVoMap" type="com.wqb.vo.StudentGradeVo">
@@ -30,15 +34,20 @@
         <result property="phone" column="phone"></result>
         <result property="createTime" column="create_time"></result>
         <result property="gradeName" column="grade_name"></result>
+        <result property="gradeid" column="gradeId"></result>
         <result property="sPassword" column="s_password"></result>
         <result property="roleid" column="roleId"></result>
+        <result property="squadId" column="squad_id"></result>
+        <result property="name" column="name"></result>
     </resultMap>
 
     <select id="selectLogin" resultMap="StudentGradeVoMap">
-        select s.s_id, s.s_no, s.s_name, s.gender, s.major, s.phone, s.create_time, s.roleId, g.grade_name
+        select s.*, g.grade_name, sq.name
         from Student s
         left join grade g
         on s.gradeId = g.grade_id
+        left join squad sq
+        on s.squad_id = sq.id
         ${ew.customSqlSegment}
     </select>
 

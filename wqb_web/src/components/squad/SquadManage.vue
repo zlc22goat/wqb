@@ -1,24 +1,23 @@
 <template>
   <div>
     <div style="margin-bottom: 5px;">
-      <el-input v-model="context" placeholder="请输入想查询的通知内容" suffix-icon="el-icon-search" style="width: 200px;"
+      <el-input v-model="name" placeholder="请输入想查询的班级名称" suffix-icon="el-icon-search" style="width: 200px;"
                 @keyup.enter.native="loadPost"></el-input>
       <el-button type="primary" style="margin-left: 5px;" @click="loadPost">查询</el-button>
       <el-button type="info" style="margin-left: 5px;" @click="resetParam">重置</el-button>
       <el-button type="success" style="margin-left: 5px;" @click="add">新增</el-button>
     </div>
     <el-table :data="tableData" :header-cell-style = "{ background: '#f3f6fd', color: '#555'}" border>
-      <el-table-column prop="messageId" label="ID" width="60">
+      <el-table-column prop="id" label="ID" width="60">
       </el-table-column>
-      <el-table-column prop="context" label="通知内容" width="600">
+      <el-table-column prop="name" label="班级名称" width="600">
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="300"></el-table-column>
       <el-table-column prop="operate" label="操作">
         <template slot-scope="scope">
           <el-button size="small" type="success" @click="mod(scope.row)">编辑</el-button>
           <el-popconfirm
               title="确定删除吗？"
-              @confirm="del(scope.row.messageId)"
+              @confirm="del(scope.row.id)"
               style="margin-left: 5px;"
           >
             <el-button slot="reference" size="small" type="danger">删除</el-button>
@@ -43,9 +42,9 @@
         center>
 
       <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="通知内容" prop="context">
+        <el-form-item label="班级名称" prop="name">
           <el-col :span="20">
-            <el-input v-model="form.context"></el-input>
+            <el-input v-model="form.name"></el-input>
           </el-col>
         </el-form-item>
       </el-form>
@@ -59,35 +58,31 @@
 
 <script>
 export default {
-  name: "MessageManage",
+  name: "SquadManage",
   data() {
     return {
       tableData: [],
       pageSize: 10,
       pageNum: 1,
       total: 0,
-      student: '',
-      squadCategoryOptions: [],
-      messageId:'',
-      context: '',
-      createTime: '',
+      id:'',
+      name: '',
       centerDialogVisible: false,
       form: {
-        messageId:'',
-        context: '',
-        createTime: '',
-        squadId: '',
+        id:'',
+        name: ''
       }
     }
   },
   methods:{
     resetForm() {
       this.$refs.form.resetFields();
-      this.form.messageId = ''
+      this.form.id = ''
+      this.form.name = ''
     },
-    del(MessageId){
+    del(id){
 
-      this.$axios.get(this.$httpUrl+'/message/del?id='+MessageId).then(res=>res.data).then(res=>{
+      this.$axios.get(this.$httpUrl+'/squad/del?id='+id).then(res=>res.data).then(res=>{
         console.log(res)
         if(res.code==200){
 
@@ -106,11 +101,12 @@ export default {
       })
     },
     mod(row){
-      // console.log(row)
+      console.log(row)
       this.centerDialogVisible = true
       this.$nextTick(()=>{
         //赋值到表单
-        this.form = row
+        this.form.id = row.id
+        this.form.name = row.name
       })
     },
     add(){
@@ -121,10 +117,9 @@ export default {
 
     },
     doSave(){
-      this.form.squadId = this.student.squadId
-      this.$axios.post(this.$httpUrl+'/message/save',this.form).then(res=>res.data).then(res=>{
+      this.$axios.post(this.$httpUrl+'/squad/save',this.form).then(res=>res.data).then(res=>{
         console.log("dosave")
-        // console.log(this.form)
+        console.log(this.form)
         if(res.code===200){
 
           this.$message({
@@ -144,8 +139,8 @@ export default {
       })
     },
     doMod(){
-      this.$axios.post(this.$httpUrl+'/message/update',this.form).then(res=>res.data).then(res=>{
-        // console.log(res)
+      this.$axios.post(this.$httpUrl+'/squad/update',this.form).then(res=>res.data).then(res=>{
+        console.log(res)
         if(res.code==200){
 
           this.$message({
@@ -168,8 +163,8 @@ export default {
       // console.log(this.form)
       this.$refs.form.validate((valid) => {
         if (valid) {
-          // console.log(this.form.messageId)
-          if(this.form.messageId){
+          // console.log(this.form.id)
+          if(this.form.id){
             console.log("mod")
             this.doMod();
           }else{
@@ -194,23 +189,21 @@ export default {
       this.pageNum=val
       this.loadPost()
     },
-    resetParam(){
-      this.context=''
-      this.loadPost()
-    },
-    getSquadCategory() {
+    loadGet(){
       this.$axios.get(this.$httpUrl+'/squad/list').then(res=>res.data).then(res=>{
-        // console.log(res)
-        this.squadCategoryOptions = res.data;
+        console.log(res)
       })
     },
+    resetParam(){
+      this.name=''
+      this.loadPost()
+    },
     loadPost(){
-      this.$axios.post(this.$httpUrl+'/message/selectByContext',{
+      this.$axios.post(this.$httpUrl+'/squad/selectByName',{
         pageSize:this.pageSize,
         pageNum:this.pageNum,
         param:{
-          context:this.context,
-          squadId: this.student.squadId
+          name:this.name
         }
       }).then(res=>res.data).then(res=>{
         console.log(res)
@@ -225,7 +218,7 @@ export default {
     },
   },
   beforeMount() {
-    this.student = JSON.parse(sessionStorage.getItem('CurUser'))
+    //this.loadGet();
     this.loadPost()
   }
 }

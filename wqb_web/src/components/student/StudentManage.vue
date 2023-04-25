@@ -11,22 +11,22 @@
                         :value="item.value">
                 </el-option>
             </el-select>
-          <el-select v-model="squadId" filterable placeholder="请选择班级" style="margin-left: 5px;">
-            <el-option
-                v-for="item in squadCategoryOptions"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-            </el-option>
-          </el-select>
+<!--          <el-select v-model="squadId" filterable placeholder="请选择班级" style="margin-left: 5px;">-->
+<!--            <el-option-->
+<!--                v-for="item in squadCategoryOptions"-->
+<!--                :key="item.id"-->
+<!--                :label="item.name"-->
+<!--                :value="item.id">-->
+<!--            </el-option>-->
+<!--          </el-select>-->
             <el-button type="primary" style="margin-left: 5px;" @click="loadPost">查询</el-button>
             <el-button type="info" style="margin-left: 5px;" @click="resetParam">重置</el-button>
             <el-button type="success" style="margin-left: 5px;" @click="add">新增</el-button>
         </div>
       <el-table :data="tableData" :header-cell-style = "{ background: '#f3f6fd', color: '#555'}" border>
-        <el-table-column prop="sno" label="账号" width="160">
+        <el-table-column prop="sno" label="账号" width="80">
         </el-table-column>
-        <el-table-column prop="sname" label="姓名" width="120">
+        <el-table-column prop="sname" label="姓名" width="100">
         </el-table-column>
         <el-table-column prop="gender" label="性别" width="60">
           <template slot-scope="scope">
@@ -35,18 +35,18 @@
                 disable-transitions>{{scope.row.gender === 1 ? '男' : '女'}}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="班级" width="150"></el-table-column>
-<!--        <el-table-column prop="major" label="专业" width="60"></el-table-column>-->
-<!--        <el-table-column prop="gradeName" label="年级" width="180"></el-table-column>-->
-        <el-table-column prop="phone" label="电话" width="280"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" width="280"></el-table-column>
-<!--        <el-table-column prop="analysis" label="学情分析">-->
-<!--          <template slot-scope="scope">-->
-<!--            <el-button size="small" type="warning" @click="analysisQuestion(scope.row)">错题分析</el-button>-->
-<!--            <el-button size="small" type="warning" @click="analysisExam(scope.row)">试卷分析</el-button>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-        <el-table-column prop="operate" label="操作">
+        <el-table-column prop="name" label="班级" width="100"></el-table-column>
+        <el-table-column prop="major" label="专业" width="60"></el-table-column>
+        <el-table-column prop="gradeName" label="年级" width="120"></el-table-column>
+        <el-table-column prop="phone" label="电话" width="180"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" width="200"></el-table-column>
+        <el-table-column prop="analysis" label="学情分析">
+          <template slot-scope="scope">
+            <el-button size="small" type="warning" @click="analysisQuestion(scope.row)">错题分析</el-button>
+            <el-button size="small" type="warning" @click="analysisExam(scope.row)">试卷分析</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column prop="operate" label="操作" width="150">
           <template slot-scope="scope">
             <el-button size="small" type="success" @click="mod(scope.row)">编辑</el-button>
             <el-popconfirm
@@ -82,7 +82,7 @@
                         <el-input v-model="form.sno"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="姓名" prop="sname">
+                <el-form-item label="名字" prop="sname">
                     <el-col :span="20">
                         <el-input v-model="form.sname"></el-input>
                     </el-col>
@@ -92,40 +92,40 @@
                         <el-input type="password" v-model="form.spassword" show-password autocomplete="off"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="性别" prop="gender">
+                <el-form-item label="性别">
                     <el-radio-group v-model="form.gender">
-                        <el-radio label="1" value="1" :key="1">男</el-radio>
-                        <el-radio label="0" value="0" :key="0">女</el-radio>
+                        <el-radio label="1">男</el-radio>
+                        <el-radio label="0">女</el-radio>
                     </el-radio-group>
                 </el-form-item>
-<!--                <el-form-item label="专业" prop="major">-->
-<!--                  <el-col :span="20">-->
-<!--                    <el-input v-model="form.major"></el-input>-->
-<!--                  </el-col>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="年级" prop="gradeName">-->
-<!--&lt;!&ndash;                  这里的form.gradeid是将要提交上去的，赋值给student中的gradeid字段&ndash;&gt;-->
-<!--&lt;!&ndash;                  而下面的item.gradeId是从grade中查出的，id名为gradeId，区分一下&ndash;&gt;-->
-<!--                  <el-select v-model="form.gradeid" filterable placeholder="请选择年级" style="margin-left: 5px;">-->
-<!--                    <el-option-->
-<!--                        v-for="item in categoryOptions"-->
-<!--                        :key="item.gradeId"-->
-<!--                        :label="item.gradeName"-->
-<!--                        :value="item.gradeId">-->
-<!--                    </el-option>-->
-<!--                  </el-select>-->
-<!--                </el-form-item>-->
-              <el-form-item label="班级" prop="name">
-                  <el-select v-model="form.squadId" filterable placeholder="请选择班级" style="margin-left: 5px;">
+                <el-form-item label="专业" prop="major">
+                  <el-col :span="20">
+                    <el-input v-model="form.major"></el-input>
+                  </el-col>
+                </el-form-item>
+                <el-form-item label="年级" prop="gradeName">
+<!--                  这里的form.gradeid是将要提交上去的，赋值给student中的gradeid字段-->
+<!--                  而下面的item.gradeId是从grade中查出的，id名为gradeId，区分一下-->
+                  <el-select v-model="form.gradeid" filterable placeholder="请选择年级" style="margin-left: 5px;">
                     <el-option
-                        v-for="item in squadCategoryOptions"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id">
+                        v-for="item in categoryOptions"
+                        :key="item.gradeId"
+                        :label="item.gradeName"
+                        :value="item.gradeId">
                     </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="联系电话" prop="phone">
+              <el-form-item label="班级" prop="name">
+                <el-select v-model="form.squadId" filterable placeholder="请选择班级" style="margin-left: 5px;">
+                  <el-option
+                      v-for="item in squadCategoryOptions"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+                <el-form-item label="电话" prop="phone">
                     <el-col :span="20">
                         <el-input v-model="form.phone"></el-input>
                     </el-col>
@@ -141,7 +141,7 @@
 
 <script>
     export default {
-        name: "AdminManage",
+        name: "StudentManage",
         data() {
             let checkDuplicate =(rule,value,callback)=>{
                 if(this.form.sid){
@@ -158,6 +158,7 @@
             };
 
             return {
+              student: '',
               tableData: [],
               categoryOptions: [],
               squadCategoryOptions: [],
@@ -245,9 +246,9 @@
                 this.getSquadCategory()
                 this.centerDialogVisible = true
                 this.$nextTick(()=>{
-                  this.form = row
-                  //赋值到表单
-                  this.form.gender = row.gender +''
+                    //赋值到表单
+                    this.form = row
+                    this.form.gender = row.gender +''
                 })
             },
             add(){
@@ -260,7 +261,7 @@
 
             },
             doSave(){
-                this.$axios.post(this.$httpUrl+'/student/saveTea',this.form).then(res=>res.data).then(res=>{
+                this.$axios.post(this.$httpUrl+'/student/save',this.form).then(res=>res.data).then(res=>{
                     console.log("dosave")
                     console.log(this.form)
                     if(res.code===200){
@@ -303,7 +304,7 @@
                 })
             },
             save(){
-              // console.log(this.form)
+              console.log(this.form)
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         if(this.form.sid){
@@ -339,13 +340,15 @@
                 this.loadPost()
             },
             loadPost(){
+              this.student = JSON.parse(sessionStorage.getItem('CurUser'))
+              this.squadId = this.student.squadId
                 this.$axios.post(this.$httpUrl+'/student/selectByName',{
                     pageSize:this.pageSize,
                     pageNum:this.pageNum,
                     param:{
                         sname:this.sname,
                         gender:this.gender,
-                        roleid: 2,
+                        roleid: 1,
                         squadId: this.squadId
                     }
                 }).then(res=>res.data).then(res=>{
@@ -379,7 +382,6 @@
           },
         },
         beforeMount() {
-            this.getSquadCategory()
             this.loadPost()
         }
     }

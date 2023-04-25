@@ -52,9 +52,7 @@
         methods:{
           register () { // 跳转到注册界面
             this.$axios.get(this.$httpUrl+'/grade/list').then(res=>res.data).then(res=>{
-
               this.categoryOptions = res.data;
-              console.log(this.categoryOptions)
               this.$router.push({path: '/register', query: {index:this.categoryOptions}});
             })
           },
@@ -73,7 +71,7 @@
                     if (valid) { //valid成功为true，失败为false
                         //去后台验证用户名密码
                         this.$axios.post(this.$httpUrl+'/student/login',this.loginForm).then(res=>res.data).then(res=>{
-                            console.log(res)
+                            // console.log("ok", res.data.student)
                             if(res.code==200){
                                 //存储
                                 sessionStorage.setItem("CurUser",JSON.stringify(res.data.student))

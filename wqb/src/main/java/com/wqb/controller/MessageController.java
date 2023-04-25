@@ -126,20 +126,19 @@ public class MessageController {
     public Result selectByContext(@RequestBody QueryPageParam query) {
         HashMap param = query.getParam();
         String context = (String)param.get("context");
+        Integer squadId = (Integer) param.get("squadId");
+
         Page<Message> messagePage = new Page<>();
         messagePage.setCurrent(query.getPageNum());
         messagePage.setSize(query.getPageSize());
 
         LambdaQueryWrapper<Message> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.like(Message::getContext, context).eq(Message::getSquadId, squadId);
 
-        if ("".equals(context)) {
-            lambdaQueryWrapper.orderByDesc(Message::getCreateTime);
-        } else {
-            lambdaQueryWrapper.like(Message::getContext, context).orderByDesc(Message::getCreateTime);
-        }
+        lambdaQueryWrapper.orderByDesc(Message::getCreateTime);
 
         IPage result = messageService.page(messagePage, lambdaQueryWrapper);
-        System.out.println("total = " + result.getTotal());
+//        System.out.println("total = " + result.getTotal());
 
         return Result.suc(result.getRecords(), result.getTotal());
     }
@@ -149,10 +148,11 @@ public class MessageController {
      * @return
      */
     @GetMapping("/selectRecent")
-    public Result selectRecent() {
+    public Result selectRecent(@RequestParam String squadId) {
 
         LambdaQueryWrapper<Message> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.orderByDesc(Message::getCreateTime).last("limit 1");
+        lambdaQueryWrapper.eq(Message::getSquadId, squadId)
+                .orderByDesc(Message::getCreateTime).last("limit 1");
 
         Message msg = messageService.getOne(lambdaQueryWrapper);
 

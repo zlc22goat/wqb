@@ -5,9 +5,9 @@ import router, {resetRouter} from "@/router";
 vue.use(Vuex)
 
 function addNewRoute(menuList) {
-    console.log(menuList)
+    // console.log(menuList)
     let routes = router.options.routes
-    console.log(routes)
+    // console.log(routes)
     routes.forEach(routeItem=>{
         if(routeItem.path=="/Index"){
             menuList.forEach(menu=>{
