@@ -171,7 +171,7 @@
             LEFT JOIN question
             ON answer.question_id = question.id
             WHERE question.student_id = #{id}
-            GROUP BY DATE_FORMAT(update_time,'%Y-%m')
+            GROUP BY DATE_FORMAT(answer.create_time,'%Y-%m')
             ) b ON a.month = b.datetime
     </select>
 
